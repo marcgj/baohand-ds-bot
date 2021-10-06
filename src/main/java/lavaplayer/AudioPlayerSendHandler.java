@@ -8,12 +8,12 @@ import org.jetbrains.annotations.Nullable;
 import java.nio.ByteBuffer;
 
 public class AudioPlayerSendHandler implements AudioSendHandler {
-    private final AudioPlayer audioPlaye;
+    private final AudioPlayer audioPlayer;
     private final ByteBuffer buffer;
     private final MutableAudioFrame frame;
 
-    public AudioPlayerSendHandler(AudioPlayer audioPlaye) {
-        this.audioPlaye = audioPlaye;
+    public AudioPlayerSendHandler(AudioPlayer audioPlayer) {
+        this.audioPlayer = audioPlayer;
         this.buffer = ByteBuffer.allocate(1024);
         this.frame = new MutableAudioFrame();
         this.frame.setBuffer(buffer);
@@ -26,7 +26,7 @@ public class AudioPlayerSendHandler implements AudioSendHandler {
 
     @Override
     public boolean canProvide() {
-        return this.audioPlaye.provide(this.frame);
+        return this.audioPlayer.provide(this.frame);
     }
 
     @Override

@@ -7,6 +7,11 @@ import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.Arrays;
+
 public class PlayCommand implements ICommand {
 
     @Override
@@ -14,6 +19,12 @@ public class PlayCommand implements ICommand {
         final TextChannel channel = ctx.getEvent().getChannel();
         final Member self = ctx.getEvent().getGuild().getSelfMember();
         final GuildVoiceState selfVoiceState = self.getVoiceState();
+
+        if (ctx.getArgs().length == 0){
+            ctx.getEvent().getChannel().sendMessage("Potser que posis algo despres del play, no?").queue();
+            return;
+        }
+
 
         if (!selfVoiceState.inVoiceChannel()){
             //Todo: connectar el bot al canal actual, com si es crides el join
@@ -33,8 +44,24 @@ public class PlayCommand implements ICommand {
             return;
         }
 
-        PlayerManager.getInstance().loadAndPlay(channel, "https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley");
+        String link = String.join(" ", ctx.getArgs());
 
+        if (!isUrl(link)) {
+            link = "ytsearch:" + link;
+        }
+
+        PlayerManager.getInstance().loadAndPlay(channel, link);
+
+    }
+
+    private boolean isUrl(String link) {
+        try{
+            new URL(link).toURI();
+
+        }catch (Exception e){
+            return false;
+        }
+        return true;
     }
 
     @Override

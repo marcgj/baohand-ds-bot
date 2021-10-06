@@ -17,7 +17,7 @@ public class JoinCommand implements ICommand {
         final GuildVoiceState selfVoiceState = self.getVoiceState();
 
         if (selfVoiceState.inVoiceChannel()){
-            System.out.println("caca");
+
             return;
         }
 
@@ -33,7 +33,7 @@ public class JoinCommand implements ICommand {
         final VoiceChannel memberChannel = memberVoiceState.getChannel();
 
         audioManager.openAudioConnection(memberChannel);
-        channel.sendMessage("Entrant a:" + memberChannel.getName()).queue();
+        channel.sendMessage("Entrant a: `" + memberChannel.getName() + "`").queue();
     }
 
     @Override

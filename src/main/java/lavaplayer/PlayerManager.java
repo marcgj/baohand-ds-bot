@@ -13,6 +13,7 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import org.w3c.dom.Text;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class PlayerManager {
@@ -48,12 +49,33 @@ public class PlayerManager {
             public void trackLoaded(AudioTrack audioTrack) {
                 musicManager.scheduler.queue(audioTrack);
 
-                channel.sendMessage("Posant a la cua: " + audioTrack.getInfo().title).queue();
+                if (musicManager.scheduler.queued == 0){
+                    channel.sendMessage("Reproduint: `" + audioTrack.getInfo().title + "`").queue();
+                }else{
+                    channel.sendMessage("Posant a la cua: `" + audioTrack.getInfo().title + "`").queue();
+                }
+
             }
 
             @Override
             public void playlistLoaded(AudioPlaylist audioPlaylist) {
+                final List<AudioTrack> tracks = audioPlaylist.getTracks();
 
+               if (audioPlaylist.isSearchResult()){
+                   trackLoaded(tracks.get(0));
+                   return;
+               }
+
+
+                for (final AudioTrack track : tracks) {
+                    musicManager.scheduler.queue(track);
+                }
+
+                if (musicManager.scheduler.queued == 0){
+                    channel.sendMessage("Reproduint la playlist: `" + audioPlaylist.getName() + "`").queue();
+                }else{
+                    channel.sendMessage("Posant a la cua la playlist: `" +  audioPlaylist.getName() + "`").queue();
+                }
             }
 
             @Override
