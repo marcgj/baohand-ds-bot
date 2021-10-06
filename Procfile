@@ -1,0 +1,1 @@
+bot: java -jar out/artifacts/baohand_bot_jar/baohand-bot.jar
