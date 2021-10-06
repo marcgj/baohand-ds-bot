@@ -1,9 +1,7 @@
 package command;
 
 import command.commands.HugCommand;
-import command.commands.music.JoinCommand;
-import command.commands.music.PlayCommand;
-import command.commands.music.QueueCommand;
+import command.commands.music.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.util.ArrayList;
@@ -22,6 +20,8 @@ public class CommandManager {
         commands.add(new JoinCommand());
         commands.add(new PlayCommand());
         commands.add(new QueueCommand());
+        commands.add(new SkipCommand());
+        commands.add(new LeaveCommand());
     }
 
     public void handle(GuildMessageReceivedEvent e){
