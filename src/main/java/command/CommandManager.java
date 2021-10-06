@@ -1,6 +1,8 @@
 package command;
 
 import command.commands.HugCommand;
+import command.commands.music.JoinCommand;
+import command.commands.music.PlayCommand;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 import java.util.ArrayList;
@@ -13,6 +15,11 @@ public class CommandManager {
 
     public CommandManager() {
         commands.add(new HugCommand());
+
+
+        //Music Commands:
+        commands.add(new JoinCommand());
+        commands.add(new PlayCommand());
     }
 
     public void handle(GuildMessageReceivedEvent e){
