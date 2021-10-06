@@ -15,6 +15,12 @@ public class SkipCommand implements ICommand {
 
     @Override
     public void handle(CommandContext ctx) {
+
+        if (ctx.getEvent().getAuthor().getId() == "257947447979016192"){
+            return;
+        }
+
+
         final TextChannel channel = ctx.getEvent().getChannel();
         final Member self = ctx.getEvent().getGuild().getSelfMember();
         final GuildVoiceState selfVoiceState = self.getVoiceState();
