@@ -17,19 +17,21 @@ public class SkipCommand implements ICommand {
         final Member self = ctx.getEvent().getGuild().getSelfMember();
         final GuildVoiceState selfVoiceState = self.getVoiceState();
 
+        // Checks if the bot is in a voice channel
         if (!selfVoiceState.inVoiceChannel()) {
-            //Todo:
+            ctx.getEvent().getChannel().sendMessage("El bot no esta a cap canal de veu").queue();
             return;
         }
 
         final Member member = ctx.getEvent().getMember();
         final GuildVoiceState memberVoiceState = member.getVoiceState();
 
+        // Checks if the member is in a voice channel
         if (!memberVoiceState.inVoiceChannel()) {
             ctx.getEvent().getChannel().sendMessage("Entra en una sala de veu").queue();
             return;
         }
-
+        // Checks if the member is in the same voice channel
         if (!memberVoiceState.getChannel().equals(selfVoiceState.getChannel())) {
             ctx.getEvent().getChannel().sendMessage("Has de estar en el mateix canal de veu que el bot...").queue();
             return;
@@ -38,6 +40,7 @@ public class SkipCommand implements ICommand {
         final GuildMusicManager musicManager = PlayerManager.getInstance().getMusicManager(channel.getGuild());
         final AudioPlayer audioPlayer = musicManager.audioPlayer;
 
+        // Checks if there are songs in the queue
         if (audioPlayer.getPlayingTrack() == null) {
             ctx.getEvent().getChannel().sendMessage("No hi ha pista a la que saltar").queue();
             return;
