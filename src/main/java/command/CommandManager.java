@@ -1,6 +1,7 @@
 package command;
 
 import command.commands.HugCommand;
+import command.commands.ShutdownCommand;
 import command.commands.music.*;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
@@ -14,6 +15,10 @@ public class CommandManager {
 
     public CommandManager() {
         commands.add(new HugCommand());
+
+
+        //Admin commands
+        commands.add(new ShutdownCommand());
 
 
         //Music Commands:

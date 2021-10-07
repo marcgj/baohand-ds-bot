@@ -6,6 +6,8 @@ import lavaplayer.PlayerManager;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.VoiceChannel;
+import net.dv8tion.jda.api.managers.AudioManager;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -20,32 +22,41 @@ public class PlayCommand implements ICommand {
         final Member self = ctx.getEvent().getGuild().getSelfMember();
         final GuildVoiceState selfVoiceState = self.getVoiceState();
 
+        // Checks if there are args
         if (ctx.getArgs().length == 0){
             ctx.getEvent().getChannel().sendMessage("Potser que posis algo despres del play, no?").queue();
-            return;
-        }
-
-
-        if (!selfVoiceState.inVoiceChannel()){
-            //Todo: connectar el bot al canal actual, com si es crides el join
             return;
         }
 
         final Member member = ctx.getEvent().getMember();
         final GuildVoiceState memberVoiceState = member.getVoiceState();
 
+
+        // Checks if  the user is in a voice channel
         if(!memberVoiceState.inVoiceChannel()){
             ctx.getEvent().getChannel().sendMessage("Entra en una sala de veu").queue();
             return;
         }
 
-        if (!memberVoiceState.getChannel().equals(selfVoiceState.getChannel())){
+        // If the bot is not already in a voice channel it joins
+        if (!selfVoiceState.inVoiceChannel()){
+            final AudioManager audioManager = ctx.getEvent().getGuild().getAudioManager();
+            final VoiceChannel memberChannel = memberVoiceState.getChannel();
+
+            audioManager.openAudioConnection(memberChannel);
+        }
+        // Checks if  the user is in the same voice channel as the bot
+        else if (!memberVoiceState.getChannel().equals(selfVoiceState.getChannel())){
+
             ctx.getEvent().getChannel().sendMessage("Has de estar en el mateix canal de veu que el bot...").queue();
             return;
         }
 
+
         String link = String.join(" ", ctx.getArgs());
 
+
+        // Chekcs if the arguments form a url
         if (!isUrl(link)) {
             link = "ytsearch:" + link;
         }
