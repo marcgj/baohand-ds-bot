@@ -5,7 +5,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
 
 public class Listener extends ListenerAdapter {
-    private final CommandManager manager = new CommandManager();
+    private final CommandManager manager = CommandManager.getInstance();
 
     @Override
     public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
