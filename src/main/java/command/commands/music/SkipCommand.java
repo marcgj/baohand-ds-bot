@@ -59,4 +59,11 @@ public class SkipCommand implements ICommand {
     public String getShort() {
         return "s";
     }
+
+    @Override
+    public String getHelp() {
+        return """
+                `!skip` salta a la seguent canço de la cua
+                """;
+    }
 }

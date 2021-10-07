@@ -81,4 +81,11 @@ public class PlayCommand implements ICommand {
     public String getShort() {
         return "p";
     }
+
+    @Override
+    public String getHelp() {
+        return """
+                `!Play` <nom_canço o url> per reproduir una canço
+                """;
+    }
 }
