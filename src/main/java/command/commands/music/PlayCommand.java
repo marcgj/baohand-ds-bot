@@ -53,7 +53,7 @@ public class PlayCommand implements ICommand {
         String link = String.join(" ", ctx.getArgs());
 
 
-        // Chekcs if the arguments form a url
+        // Checks if the arguments form a url
         if (!isUrl(link)) {
             link = "ytsearch:" + link;
         }
@@ -75,5 +75,10 @@ public class PlayCommand implements ICommand {
     @Override
     public String getName() {
         return "play";
+    }
+
+    @Override
+    public String getShort() {
+        return "p";
     }
 }

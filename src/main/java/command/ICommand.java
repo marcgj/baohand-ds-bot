@@ -6,5 +6,12 @@ public interface ICommand {
 
     String getName();
 
+    default boolean adminCommand(){
+        return false;
+    }
+
+    default String getShort(){
+        return null;
+    }
 
 }

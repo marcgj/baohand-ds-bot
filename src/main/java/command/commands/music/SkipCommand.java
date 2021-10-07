@@ -54,4 +54,9 @@ public class SkipCommand implements ICommand {
     public String getName() {
         return "skip";
     }
+
+    @Override
+    public String getShort() {
+        return "s";
+    }
 }

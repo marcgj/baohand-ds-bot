@@ -23,4 +23,9 @@ public class QueueCommand implements ICommand {
     public String getName() {
         return "queue";
     }
+
+    @Override
+    public String getShort() {
+        return "q";
+    }
 }
