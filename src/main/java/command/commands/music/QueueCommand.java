@@ -15,7 +15,10 @@ public class QueueCommand implements ICommand {
         if (manager.scheduler.queued == 0) {
             ctx.getEvent().getChannel().sendMessage("La cua esta buida").queue();
         } else {
-            ctx.getEvent().getChannel().sendMessage(manager.scheduler.toString()).queue();
+            final String twoOptions = manager.scheduler.queued > 1 ? "cançons" : "canço";
+
+            ctx.getEvent().getChannel().sendMessage("Hi ha actualment **" + manager.scheduler.queued + "** " + twoOptions + " a la cua i son: \n" +
+                    manager.scheduler).queue();
         }
     }
 
