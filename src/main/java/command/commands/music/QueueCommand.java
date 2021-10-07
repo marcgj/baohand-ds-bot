@@ -12,9 +12,9 @@ public class QueueCommand implements ICommand {
         final GuildMusicManager manager = player.getMusicManager(ctx.getEvent().getGuild());
 
         //TODO: Fer les comprobacions de que el bot te cua, esta en un canal de veu i el mateix que el ususari
-        if (manager.scheduler.queued == 0){
+        if (manager.scheduler.queued == 0) {
             ctx.getEvent().getChannel().sendMessage("La cua esta buida").queue();
-        }else{
+        } else {
             ctx.getEvent().getChannel().sendMessage(manager.scheduler.toString()).queue();
         }
     }

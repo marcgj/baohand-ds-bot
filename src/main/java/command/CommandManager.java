@@ -29,7 +29,7 @@ public class CommandManager {
         commands.add(new LeaveCommand());
     }
 
-    public void handle(GuildMessageReceivedEvent e){
+    public void handle(GuildMessageReceivedEvent e) {
         String[] tokenized = e.getMessage().getContentRaw().split(" ");
 
         String commandName = tokenized[0].replace("!", "");

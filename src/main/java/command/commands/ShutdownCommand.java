@@ -3,7 +3,6 @@ package command.commands;
 import command.CommandContext;
 import command.ICommand;
 import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
 public class ShutdownCommand implements ICommand {
     @Override
@@ -11,7 +10,7 @@ public class ShutdownCommand implements ICommand {
         final User user = ctx.getEvent().getAuthor();
 
         //Checks if the user is Takotero
-        if(!user.getId().equals("230029852831383553") ){
+        if (!user.getId().equals("230029852831383553")) {
             ctx.getEvent().getChannel().sendMessage("Nomes el <@230029852831383553> pot fer anar aquesta commanda").queue();
             return;
         }

@@ -16,7 +16,7 @@ public class GuildMusicManager {
         this.sendHandler = new AudioPlayerSendHandler(this.audioPlayer);
     }
 
-    public AudioPlayerSendHandler getSendHandler(){
+    public AudioPlayerSendHandler getSendHandler() {
         return sendHandler;
     }
 }

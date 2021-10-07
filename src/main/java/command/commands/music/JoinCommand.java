@@ -2,7 +2,6 @@ package command.commands.music;
 
 import command.CommandContext;
 import command.ICommand;
-import lavaplayer.PlayerManager;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -16,7 +15,7 @@ public class JoinCommand implements ICommand {
         final Member self = ctx.getEvent().getGuild().getSelfMember();
         final GuildVoiceState selfVoiceState = self.getVoiceState();
 
-        if (selfVoiceState.inVoiceChannel()){
+        if (selfVoiceState.inVoiceChannel()) {
 
             return;
         }
@@ -24,7 +23,7 @@ public class JoinCommand implements ICommand {
         final Member member = ctx.getEvent().getMember();
         final GuildVoiceState memberVoiceState = member.getVoiceState();
 
-        if(!memberVoiceState.inVoiceChannel()){
+        if (!memberVoiceState.inVoiceChannel()) {
             ctx.getEvent().getChannel().sendMessage("Has de estar en una sala de veu primer").queue();
             return;
         }

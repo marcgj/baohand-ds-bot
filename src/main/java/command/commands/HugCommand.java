@@ -15,9 +15,9 @@ public class HugCommand implements ICommand {
         String[] args = ctx.getArgs();
 
 
-        if (args.length != 0){
+        if (args.length != 0) {
             reciver = args[0];
-        }else{
+        } else {
             reciver = "<@" + author.getId() + ">";
         }
 

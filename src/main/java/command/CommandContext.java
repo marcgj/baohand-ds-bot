@@ -7,7 +7,7 @@ public class CommandContext {
     private final GuildMessageReceivedEvent event;
     private final String[] args;
 
-    public CommandContext(GuildMessageReceivedEvent event, String[] args){
+    public CommandContext(GuildMessageReceivedEvent event, String[] args) {
         this.event = event;
         this.args = args;
     }

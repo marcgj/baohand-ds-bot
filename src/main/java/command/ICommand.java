@@ -7,5 +7,4 @@ public interface ICommand {
     String getName();
 
 
-
 }

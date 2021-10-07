@@ -12,7 +12,7 @@ public class Listener extends ListenerAdapter {
 
         if (event.getAuthor().isBot() || event.isWebhookMessage()) return;
 
-        if (event.getMessage().getContentRaw().startsWith(Config.PREFIX)){
+        if (event.getMessage().getContentRaw().startsWith(Config.PREFIX)) {
             manager.handle(event);
         }
 

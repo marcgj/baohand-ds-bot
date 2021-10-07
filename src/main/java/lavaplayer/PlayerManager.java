@@ -3,14 +3,12 @@ package lavaplayer;
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
-import com.sedmelluq.discord.lavaplayer.source.AudioSourceManager;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
-import org.w3c.dom.Text;
 
 import java.util.HashMap;
 import java.util.List;
@@ -31,7 +29,15 @@ public class PlayerManager {
         AudioSourceManagers.registerLocalSource(this.audioPlayerManager);
     }
 
-    public GuildMusicManager getMusicManager(Guild guild){
+    public static PlayerManager getInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new PlayerManager();
+        }
+
+        return INSTANCE;
+    }
+
+    public GuildMusicManager getMusicManager(Guild guild) {
         return this.musicManagers.computeIfAbsent(guild.getIdLong(), (guildId) -> {
             final GuildMusicManager guildMusicManager = new GuildMusicManager(this.audioPlayerManager);
 
@@ -41,7 +47,7 @@ public class PlayerManager {
         });
     }
 
-    public void loadAndPlay(TextChannel channel, String trackUrl){
+    public void loadAndPlay(TextChannel channel, String trackUrl) {
         final GuildMusicManager musicManager = this.getMusicManager(channel.getGuild());
 
         this.audioPlayerManager.loadItemOrdered(musicManager, trackUrl, new AudioLoadResultHandler() {
@@ -49,9 +55,9 @@ public class PlayerManager {
             public void trackLoaded(AudioTrack audioTrack) {
                 musicManager.scheduler.queue(audioTrack);
 
-                if (musicManager.scheduler.queued == 0){
+                if (musicManager.scheduler.queued == 0) {
                     channel.sendMessage("Reproduint: `" + audioTrack.getInfo().title + "`").queue();
-                }else{
+                } else {
                     channel.sendMessage("Posant a la cua: `" + audioTrack.getInfo().title + "`").queue();
                 }
 
@@ -61,20 +67,20 @@ public class PlayerManager {
             public void playlistLoaded(AudioPlaylist audioPlaylist) {
                 final List<AudioTrack> tracks = audioPlaylist.getTracks();
 
-               if (audioPlaylist.isSearchResult()){
-                   trackLoaded(tracks.get(0));
-                   return;
-               }
+                if (audioPlaylist.isSearchResult()) {
+                    trackLoaded(tracks.get(0));
+                    return;
+                }
 
 
                 for (final AudioTrack track : tracks) {
                     musicManager.scheduler.queue(track);
                 }
 
-                if (musicManager.scheduler.queued == 0){
+                if (musicManager.scheduler.queued == 0) {
                     channel.sendMessage("Reproduint la playlist: `" + audioPlaylist.getName() + "`").queue();
-                }else{
-                    channel.sendMessage("Posant a la cua la playlist: `" +  audioPlaylist.getName() + "`").queue();
+                } else {
+                    channel.sendMessage("Posant a la cua la playlist: `" + audioPlaylist.getName() + "`").queue();
                 }
             }
 
@@ -88,14 +94,5 @@ public class PlayerManager {
 
             }
         });
-    }
-
-
-    public static PlayerManager getInstance(){
-        if (INSTANCE == null){
-            INSTANCE = new PlayerManager();
-        }
-
-        return INSTANCE;
     }
 }
