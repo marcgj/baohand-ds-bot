@@ -41,4 +41,11 @@ public class LeaveCommand implements ICommand {
     public String getName() {
         return "leave";
     }
+
+    @Override
+    public String getHelp() {
+        return """
+                `!leave` per a treure el bot del chat de veu
+                """;
+    }
 }

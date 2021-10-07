@@ -3,6 +3,7 @@ package command.commands;
 import command.CommandContext;
 import command.CommandManager;
 import command.ICommand;
+import net.dv8tion.jda.api.EmbedBuilder;
 
 public class HelpCommand implements ICommand
 {
@@ -13,12 +14,12 @@ public class HelpCommand implements ICommand
 
         if(ctx.getArgs().length == 0){
 
-            int i = 0;
             StringBuilder builder = new StringBuilder();
+            builder.append( ">>> Les comandes disponibles son:\n");
             for(ICommand cmd : manager.getCommands()){
-                String line = String.format("**%s.** `!%s`\n", i + 1, cmd.getName() );
+                String line = String.format("`!%s`\n\n", cmd.getName() );
                 builder.append(line);
-                i++;
+
             }
             ctx.getEvent().getChannel().sendMessage(builder.toString()).queue();
         }else{

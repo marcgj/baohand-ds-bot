@@ -39,4 +39,11 @@ public class JoinCommand implements ICommand {
     public String getName() {
         return "join";
     }
+
+    @Override
+    public String getHelp() {
+        return """
+                `!join` per fer entrar al bot a la sala
+                """;
+    }
 }
