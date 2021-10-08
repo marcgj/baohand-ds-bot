@@ -15,7 +15,6 @@ import java.util.concurrent.BlockingQueue;
 public class QueueCommand implements ICommand {
     @Override
     public void handle(CommandContext ctx) {
-        final Dotenv dotenv = Dotenv.load();
 
         final PlayerManager player = PlayerManager.getInstance();
         final GuildMusicManager manager = player.getMusicManager(ctx.getEvent().getGuild());
@@ -25,7 +24,7 @@ public class QueueCommand implements ICommand {
         final int queueSize = queue.size();
 
         EmbedBuilder builder = new EmbedBuilder();
-        builder.setColor(Color.decode(dotenv.get("QUOTE_COLOR"))); // Canvia el color de la barra lateral
+        builder.setColor(Color.decode(Dotenv.load().get("QUOTE_COLOR"))); // Canvia el color de la barra lateral
 
 
         if (queueSize == 0) {
