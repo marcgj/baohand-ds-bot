@@ -73,5 +73,11 @@ public class QueueCommand implements ICommand {
         String strHours=(hours<10)?"0"+Integer.toString(hours):Integer.toString(hours);
 
         return (strHours + ":" + strmin + ":" + strSec);
+
+    @Override
+    public String getHelp() {
+        return """
+                `!queue` diu el nom de les cançons en cua amb l'ordre corresponent
+                """;
     }
 }

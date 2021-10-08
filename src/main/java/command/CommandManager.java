@@ -1,8 +1,10 @@
 package command;
 
+import command.commands.HelpCommand;
 import command.commands.HugCommand;
 import command.commands.ShutdownCommand;
 import command.commands.music.*;
+import lavaplayer.PlayerManager;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
@@ -17,6 +19,7 @@ public class CommandManager {
 
     public CommandManager() {
         commands.add(new HugCommand());
+        commands.add(new HelpCommand());
 
 
         //Admin commands
@@ -29,6 +32,7 @@ public class CommandManager {
         commands.add(new QueueCommand());
         commands.add(new SkipCommand());
         commands.add(new LeaveCommand());
+
     }
 
     public void handle(GuildMessageReceivedEvent e) {
@@ -56,7 +60,7 @@ public class CommandManager {
     }
 
     // Obtains the command whether is a short name or the long one is used
-    private ICommand getCommand(String s) {
+    public ICommand getCommand(String s) {
         String search = s.toLowerCase();
 
         if (s.length() == 1){
@@ -74,5 +78,18 @@ public class CommandManager {
         return null;
     }
 
+    private static CommandManager INSTANCE;
 
+    public static CommandManager getInstance() {
+
+        if (INSTANCE == null) {
+            INSTANCE = new CommandManager();
+        }
+
+        return INSTANCE;
+    }
+
+    public List<ICommand> getCommands() {
+        return commands;
+    }
 }

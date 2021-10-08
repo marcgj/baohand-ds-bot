@@ -21,7 +21,7 @@ public class HugCommand implements ICommand {
             reciver = "<@" + author.getId() + ">";
         }
 
-        String message = "Un abruzo homosesual para: " + reciver;
+        String message = "Un abruzo homosesual para: " + reciver + " :open_hands: ";
 
         e.getChannel().sendMessage(message).queue();
     }
@@ -31,4 +31,10 @@ public class HugCommand implements ICommand {
         return "hug";
     }
 
+    @Override
+    public String getHelp() {
+        return """
+                `!hug <gilipolles anonim>` per enviar un abraç a la teva waifu :open_hands:
+                """;
+    }
 }

@@ -14,4 +14,5 @@ public interface ICommand {
         return null;
     }
 
+    default String getHelp() { return "Apartat help no implementada en aquesta comanda"; }
 }
