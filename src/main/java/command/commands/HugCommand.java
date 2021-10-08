@@ -2,10 +2,16 @@ package command.commands;
 
 import command.CommandContext;
 import command.ICommand;
+import net.dv8tion.jda.api.entities.Emoji;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.interactions.components.ActionRow;
+import net.dv8tion.jda.api.interactions.components.Button;
+
+import java.util.Collection;
 
 public class HugCommand implements ICommand {
+
     @Override
     public void handle(CommandContext ctx) {
         String reciver;
@@ -22,8 +28,8 @@ public class HugCommand implements ICommand {
         }
 
         String message = "Un abruzo homosesual para: " + reciver + " :open_hands: ";
-
-        e.getChannel().sendMessage(message).queue();
+        Button boto = Button.link("https://www.youtube.com/watch?v=dQw4w9WgXcQ", "\uD83E\uDD75\uD83E\uDD75 NO CLICKIS " +author.getName() + ", ***** DE ZERO TWO \uD83E\uDD75\uD83E\uDD75");
+        e.getChannel().sendMessage(message).setActionRow(boto).queue();
     }
 
     @Override
