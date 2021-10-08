@@ -46,7 +46,22 @@ public class SkipCommand implements ICommand {
             return;
         }
 
-        musicManager.scheduler.nextTrack();
+        final String[] args = ctx.getArgs();
+
+        if (args.length == 0){
+            musicManager.scheduler.nextTrack();
+        }else if (args.length > 1){
+            ctx.getEvent().getChannel().sendMessage("Posa nomes un argument, per a mes ajuda `!help skip`").queue();
+        }else{
+            final int pos = Integer.parseInt(args[0]);
+
+            if (pos < musicManager.scheduler.getQueue().size()){
+                musicManager.scheduler.nextTrack(pos);
+            }else{
+                ctx.getEvent().getChannel().sendMessageFormat("No hi ha cap canço a la posicio **%s** de la cua", pos).queue();
+            }
+        }
+
         ctx.getEvent().getChannel().sendMessageFormat("Saltant a la canço: `%s`", musicManager.audioPlayer.getPlayingTrack().getInfo().title).queue();
     }
 
@@ -64,6 +79,7 @@ public class SkipCommand implements ICommand {
     public String getHelp() {
         return """
                 `!skip` salta a la seguent canço de la cua
+                `!skip <pos>` salta a una canço especifica de la cua
                 """;
     }
 }
