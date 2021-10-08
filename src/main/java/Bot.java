@@ -1,3 +1,4 @@
+import io.github.cdimascio.dotenv.Dotenv;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
@@ -7,7 +8,10 @@ import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import javax.security.auth.login.LoginException;
 
 public class Bot {
-    private static final String TOKEN = Config.API_KEY;
+
+    public static final Dotenv dotenv = Dotenv.load();
+
+    private static final String TOKEN = dotenv.get("API_KEY");
     public static JDA jda;
 
 
@@ -16,7 +20,7 @@ public class Bot {
         jda = JDABuilder.createDefault(TOKEN,
                         GatewayIntent.GUILD_VOICE_STATES,
                         GatewayIntent.GUILD_MESSAGES)
-                .setActivity(Activity.playing(Config.STATUS)).
+                .setActivity(Activity.playing(dotenv.get("STATUS"))).
                 enableCache(CacheFlag.VOICE_STATE).
                 build();
 

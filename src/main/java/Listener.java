@@ -1,4 +1,5 @@
 import command.CommandManager;
+import io.github.cdimascio.dotenv.Dotenv;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -12,10 +13,9 @@ public class Listener extends ListenerAdapter {
 
         if (event.getAuthor().isBot() || event.isWebhookMessage()) return;
 
-        if (event.getMessage().getContentRaw().startsWith(Config.PREFIX)) {
+        if (event.getMessage().getContentRaw().startsWith(Bot.dotenv.get("PREFIX"))) {
             manager.handle(event);
         }
-
     }
 
     @Override
