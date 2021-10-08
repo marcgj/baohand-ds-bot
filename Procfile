@@ -1,1 +1,1 @@
-bot: java -jar target/baohand-bot-1.0-SNAPSHOT.jar
+bot: java -jar out/artifacts/baohand_bot_jar/baohand-bot.jar
