@@ -12,8 +12,6 @@ public class TrackScheduler extends AudioEventAdapter {
 
     private final AudioPlayer player;
     private final BlockingQueue<AudioTrack> queue;
-    public int queued = 0;
-
 
     public TrackScheduler(AudioPlayer player) {
         this.player = player;
@@ -24,7 +22,6 @@ public class TrackScheduler extends AudioEventAdapter {
     public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
         if (endReason.mayStartNext) {
             nextTrack();
-            queued--;
         }
     }
 
@@ -35,9 +32,14 @@ public class TrackScheduler extends AudioEventAdapter {
     public void queue(AudioTrack track) {
         if (!this.player.startTrack(track, true)) {
             this.queue.offer(track);
-            queued++;
         }
     }
+
+    public BlockingQueue<AudioTrack> getQueue(){
+        return queue;
+    }
+
+    /*
 
     @Override
     public String toString() {
@@ -62,4 +64,6 @@ public class TrackScheduler extends AudioEventAdapter {
         }
         return builder.toString();
     }
+
+     */
 }

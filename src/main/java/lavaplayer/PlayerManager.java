@@ -55,7 +55,7 @@ public class PlayerManager {
             public void trackLoaded(AudioTrack audioTrack) {
                 musicManager.scheduler.queue(audioTrack);
 
-                if (musicManager.scheduler.queued == 0) {
+                if (musicManager.scheduler.getQueue().size() == 0) {
                     channel.sendMessage("Reproduint: `" + audioTrack.getInfo().title + "`").queue();
                 } else {
                     channel.sendMessage("Posant a la cua: `" + audioTrack.getInfo().title + "`").queue();
@@ -77,7 +77,7 @@ public class PlayerManager {
                     musicManager.scheduler.queue(track);
                 }
 
-                if (musicManager.scheduler.queued == 0) {
+                if (musicManager.scheduler.getQueue().size() == 0) {
                     channel.sendMessage("Reproduint la playlist: `" + audioPlaylist.getName() + "`").queue();
                 } else {
                     channel.sendMessage("Posant a la cua la playlist: `" + audioPlaylist.getName() + "`").queue();
