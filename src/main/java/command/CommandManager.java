@@ -4,6 +4,7 @@ import command.commands.HelpCommand;
 import command.commands.HugCommand;
 import command.commands.ShutdownCommand;
 import command.commands.music.*;
+import io.github.cdimascio.dotenv.Dotenv;
 import lavaplayer.PlayerManager;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
@@ -21,10 +22,8 @@ public class CommandManager {
         commands.add(new HugCommand());
         commands.add(new HelpCommand());
 
-
         //Admin commands
         commands.add(new ShutdownCommand());
-
 
         //Music Commands:
         commands.add(new JoinCommand());
@@ -38,14 +37,13 @@ public class CommandManager {
     public void handle(GuildMessageReceivedEvent e) {
         String[] tokenized = e.getMessage().getContentRaw().split(" ");
 
-        String commandName = tokenized[0].replace("!", "");
+        String commandName = tokenized[0].replace(Dotenv.load().get("PREFIX"), "");
         ICommand cmd = getCommand(commandName);
 
         if (cmd != null) {
             String[] args = Arrays.copyOfRange(tokenized, 1, tokenized.length);
 
             final String userId = e.getAuthor().getId();
-
 
             if (cmd.adminCommand() && !Admins.adminIds.contains(userId)) {
                 e.getChannel().sendMessage("Nomes els admins poden fer anar aquesta commanda").queue();

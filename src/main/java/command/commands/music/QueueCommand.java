@@ -3,6 +3,7 @@ package command.commands.music;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import command.CommandContext;
 import command.ICommand;
+import io.github.cdimascio.dotenv.Dotenv;
 import lavaplayer.GuildMusicManager;
 import lavaplayer.PlayerManager;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -14,6 +15,8 @@ import java.util.concurrent.BlockingQueue;
 public class QueueCommand implements ICommand {
     @Override
     public void handle(CommandContext ctx) {
+        final Dotenv dotenv = Dotenv.load();
+
         final PlayerManager player = PlayerManager.getInstance();
         final GuildMusicManager manager = player.getMusicManager(ctx.getEvent().getGuild());
         //TODO: Fer les comprobacions de que el bot te cua, esta en un canal de veu i el mateix que el ususari
@@ -22,7 +25,7 @@ public class QueueCommand implements ICommand {
         final int queueSize = queue.size();
 
         EmbedBuilder builder = new EmbedBuilder();
-        builder.setColor(Color.GREEN); // Canvia el color de la barra lateral //TODO: canviar a un .env
+        builder.setColor(Color.decode(dotenv.get("QUOTE_COLOR"))); // Canvia el color de la barra lateral
 
 
         if (queueSize == 0) {
