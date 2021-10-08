@@ -73,7 +73,8 @@ public class QueueCommand implements ICommand {
         String strHours=(hours<10)?"0"+Integer.toString(hours):Integer.toString(hours);
 
         return (strHours + ":" + strmin + ":" + strSec);
-
+    }
+    
     @Override
     public String getHelp() {
         return """
