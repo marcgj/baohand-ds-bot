@@ -80,7 +80,7 @@ public class QueueCommand implements ICommand {
     @Override
     public String getHelp() {
         return """
-                `!queue` diu el nom de les cançons en cua amb l'ordre corresponent
+                `!queue` llista les cançons en cua
                 """;
     }
 }

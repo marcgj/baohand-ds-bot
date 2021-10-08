@@ -66,7 +66,7 @@ public class ClearQueueCommand implements ICommand {
     @Override
     public String getHelp() {
         return """
-                `!clear` per a buidar la cua
+                `!clear` per buidar la cua
                 """;
     }
 }

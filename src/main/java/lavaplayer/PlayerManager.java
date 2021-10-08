@@ -63,7 +63,7 @@ public class PlayerManager {
                         .setColor(Color.decode(Dotenv.load().get("QUOTE_COLOR")));
 
                 if (musicManager.scheduler.getQueue().size() == 0) {
-                    builder.setTitle("Reproduint:");
+                    builder.setTitle("<a:rythmicalparrot:896052037324771348> Reproduint:");
                 } else {
                     builder.setTitle("Posant a la cua:");
                 }

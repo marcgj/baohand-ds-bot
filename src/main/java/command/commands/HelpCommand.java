@@ -3,7 +3,10 @@ package command.commands;
 import command.CommandContext;
 import command.CommandManager;
 import command.ICommand;
+import io.github.cdimascio.dotenv.Dotenv;
 import net.dv8tion.jda.api.EmbedBuilder;
+
+import java.awt.*;
 
 public class HelpCommand implements ICommand
 {
@@ -11,22 +14,28 @@ public class HelpCommand implements ICommand
     public void handle(CommandContext ctx) {
 
         final CommandManager manager = CommandManager.getInstance();
+        EmbedBuilder builder = new EmbedBuilder();
+        builder.setColor(Color.decode(Dotenv.load().get("QUOTE_COLOR")));
 
         if(ctx.getArgs().length == 0){
 
-            StringBuilder builder = new StringBuilder();
-            builder.append( ">>> Les comandes disponibles son:\n");
+
+            builder.setTitle( " **Les comandes disponibles son:**\n\n");
             for(ICommand cmd : manager.getCommands()){
                 String line = String.format("`!%s`\n\n", cmd.getName() );
-                builder.append(line);
+                builder.appendDescription(line);
 
             }
-            ctx.getEvent().getChannel().sendMessage(builder.toString()).queue();
+            builder.setFooter("Per mes informació escriu : !help <comanda>");
+
         }else{
             final String commandName = ctx.getArgs()[0];
             final ICommand cmd = manager.getCommand(commandName);
-            ctx.getEvent().getChannel().sendMessage(cmd.getHelp()).queue();
+            builder.setTitle("Us de la comanda:");
+            builder.setDescription(cmd.getHelp());
         }
+
+        ctx.getEvent().getChannel().sendMessage(builder.build()).queue();
     }
 
     @Override
@@ -37,8 +46,7 @@ public class HelpCommand implements ICommand
     @Override
     public String getHelp() {
         return """
-                **Us de la comanda:**
-                `!help` per obtenir tots els comandos disponibles
+                `!help` per obtenir tots els comandos disponibles 
                 `!help <comanda>` per obtenir mes informacio de la comanda
                 """;
     }
