@@ -52,13 +52,15 @@ public class SkipCommand implements ICommand {
             musicManager.scheduler.nextTrack();
         }else if (args.length > 1){
             ctx.getEvent().getChannel().sendMessage("Posa nomes un argument, per a mes ajuda `!help skip`").queue();
+            return;
         }else{
             final int pos = Integer.parseInt(args[0]);
 
-            if (pos < musicManager.scheduler.getQueue().size()){
+            if (pos <= musicManager.scheduler.getQueue().size() && pos > 0){
                 musicManager.scheduler.nextTrack(pos);
             }else{
                 ctx.getEvent().getChannel().sendMessageFormat("No hi ha cap canço a la posicio **%s** de la cua", pos).queue();
+                return;
             }
         }
 
