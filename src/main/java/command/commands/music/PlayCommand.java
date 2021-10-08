@@ -85,7 +85,7 @@ public class PlayCommand implements ICommand {
     @Override
     public String getHelp() {
         return """
-                `!Play` <nom_canço o url> per reproduir una canço
+                `!play <nom_canço o url>` per reproduir una canço
                 """;
     }
 }
