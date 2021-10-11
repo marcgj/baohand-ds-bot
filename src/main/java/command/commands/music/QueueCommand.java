@@ -7,17 +7,25 @@ import io.github.cdimascio.dotenv.Dotenv;
 import lavaplayer.GuildMusicManager;
 import lavaplayer.PlayerManager;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.interactions.components.Button;
 
 import java.awt.*;
 import java.lang.reflect.Field;
 import java.util.concurrent.BlockingQueue;
 
 public class QueueCommand implements ICommand {
+    public int pag = 0;
+
     @Override
     public void handle(CommandContext ctx) {
+        pag = 0;
+        handle(ctx,pag);
+    }
+
+    public void handle(CommandContext ctx, int pag) {
 
         final PlayerManager player = PlayerManager.getInstance();
-        final GuildMusicManager manager = player.getMusicManager(ctx.getEvent().getGuild());
+        final GuildMusicManager manager = player.getMusicManager(ctx.getGuild());
         //TODO: Fer les comprobacions de que el bot te cua, esta en un canal de veu i el mateix que el ususari
 
         final BlockingQueue<AudioTrack> queue = manager.scheduler.getQueue();
@@ -25,6 +33,7 @@ public class QueueCommand implements ICommand {
 
         EmbedBuilder builder = new EmbedBuilder();
         builder.setColor(Color.decode(Dotenv.load().get("QUOTE_COLOR"))); // Canvia el color de la barra lateral
+
 
 
         if (queueSize == 0) {
@@ -36,22 +45,48 @@ public class QueueCommand implements ICommand {
             builder.setTitle(String.format("Hi ha **%s** %s a la cua:\n", queue.size() , twoOptions));
 
             //TODO: multiples pagines amb reactions
+
+            int paginaInici = pag*10;
+            int paginaFinal = 10 + pag*10;
             int i = 1;
-            for (AudioTrack track : queue){
-                String fieldName = String.format("**%s.** [`%s`](%s)",i++, track.getInfo().title, track.getInfo().uri);
-                String descField = String.format("[%s]", timeConverter((int) track.getDuration()/1000));
+            //FER RANG 0 PAG
+            for (AudioTrack track : queue) {
+
+                if (i > paginaInici && i <= paginaFinal){
+                    System.out.println(pag);
+                    String fieldName = String.format("**%s.** [`%s`](%s)", i, track.getInfo().title, track.getInfo().uri);
+                    String descField = String.format("[%s]", timeConverter((int) track.getDuration() / 1000));
 
                 stringBuilder.append(fieldName).append("\n").append(descField).append("\n\n");
+                }
 
-                if (i > 10) {
-                    stringBuilder.append("**...**");
+                if (i >= paginaFinal) {
+                    stringBuilder.append(" **Pagina** ").append(pag + 1).append(" de ").append(queueSize / 10 + 1);
                     break;
-                };
+                }
+                i++;
             }
             builder.setDescription(stringBuilder.toString());
-
         }
-        ctx.getEvent().getChannel().sendMessage(builder.build()).queue();
+
+        if (queueSize < 10) {
+            ctx.getChannel().sendMessage(builder.build()).queue();
+            return;
+        }
+
+        Button backward = Button.primary("backward","<<");
+        Button forward = Button.secondary("forward",">>");
+
+        if (pag <= 0) {
+            ctx.getChannel().sendMessage(builder.build()).setActionRow(forward).queue();
+        } else if (pag == queueSize/10){
+            ctx.getChannel().sendMessage(builder.build()).setActionRow(backward).queue();
+        }
+        else {
+            ctx.getButtonEvent().editMessageEmbeds(builder.build()).setActionRow(backward,forward).queue();
+        }
+
+
     }
 
     @Override
