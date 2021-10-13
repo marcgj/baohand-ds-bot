@@ -5,17 +5,15 @@ import command.commands.HugCommand;
 import command.commands.ShutdownCommand;
 import command.commands.music.*;
 import io.github.cdimascio.dotenv.Dotenv;
-import lavaplayer.PlayerManager;
-import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 
-import java.io.ObjectInputFilter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class CommandManager {
 
+    private static CommandManager INSTANCE;
     private final List<ICommand> commands = new ArrayList<>();
 
     public CommandManager() {
@@ -35,6 +33,15 @@ public class CommandManager {
 
     }
 
+    public static CommandManager getInstance() {
+
+        if (INSTANCE == null) {
+            INSTANCE = new CommandManager();
+        }
+
+        return INSTANCE;
+    }
+
     public void handle(GuildMessageReceivedEvent e) {
         String[] tokenized = e.getMessage().getContentRaw().split(" ");
 
@@ -52,7 +59,7 @@ public class CommandManager {
             }
 
             cmd.handle(new CommandContext(e, args));
-        }else{
+        } else {
             e.getChannel().sendMessageFormat("La comanda **%s** no exesteix", commandName).queue();
         }
 
@@ -62,30 +69,19 @@ public class CommandManager {
     public ICommand getCommand(String s) {
         String search = s.toLowerCase();
 
-        if (s.length() == 1){
+        if (s.length() == 1) {
             for (ICommand command : commands) {
-                if (command.getShort() != null){
+                if (command.getShort() != null) {
                     if (command.getShort().equals(search)) return command;
                 }
             }
-        }else{
+        } else {
             for (ICommand command : commands) {
                 if (command.getName().equals(search)) return command;
             }
         }
 
         return null;
-    }
-
-    private static CommandManager INSTANCE;
-
-    public static CommandManager getInstance() {
-
-        if (INSTANCE == null) {
-            INSTANCE = new CommandManager();
-        }
-
-        return INSTANCE;
     }
 
     public List<ICommand> getCommands() {

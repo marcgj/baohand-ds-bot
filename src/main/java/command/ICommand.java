@@ -6,13 +6,15 @@ public interface ICommand {
 
     String getName();
 
-    default boolean adminCommand(){
+    default boolean adminCommand() {
         return false;
     }
 
-    default String getShort(){
+    default String getShort() {
         return null;
     }
 
-    default String getHelp() { return "Apartat help no implementada en aquesta comanda"; }
+    default String getHelp() {
+        return "Apartat help no implementada en aquesta comanda";
+    }
 }

@@ -11,29 +11,31 @@ import net.dv8tion.jda.api.entities.TextChannel;
 
 public class SkipCommand implements ICommand {
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public void handle(CommandContext ctx) {
-        final TextChannel channel = ctx.getEvent().getChannel();
-        final Member self = ctx.getEvent().getGuild().getSelfMember();
+        final TextChannel channel = ctx.getChannel();
+        final Member self = ctx.getSelfMember();
         final GuildVoiceState selfVoiceState = self.getVoiceState();
+
 
         // Checks if the bot is in a voice channel
         if (!selfVoiceState.inVoiceChannel()) {
-            ctx.getEvent().getChannel().sendMessage("El bot no esta a cap canal de veu").queue();
+            ctx.sendChannelMessage("El bot no esta a cap canal de veu");
             return;
         }
 
-        final Member member = ctx.getEvent().getMember();
+        final Member member = ctx.getMember();
         final GuildVoiceState memberVoiceState = member.getVoiceState();
 
         // Checks if the member is in a voice channel
         if (!memberVoiceState.inVoiceChannel()) {
-            ctx.getEvent().getChannel().sendMessage("Entra en una sala de veu").queue();
+            ctx.sendChannelMessage("Entra en una sala de veu");
             return;
         }
         // Checks if the member is in the same voice channel
         if (!memberVoiceState.getChannel().equals(selfVoiceState.getChannel())) {
-            ctx.getEvent().getChannel().sendMessage("Has de estar en el mateix canal de veu que el bot...").queue();
+            ctx.sendChannelMessage("Has de estar en el mateix canal de veu que el bot...");
             return;
         }
 
@@ -42,29 +44,29 @@ public class SkipCommand implements ICommand {
 
         // Checks if there are songs in the queue
         if (audioPlayer.getPlayingTrack() == null) {
-            ctx.getEvent().getChannel().sendMessage("No hi ha pista a la que saltar").queue();
+            ctx.sendChannelMessage("No hi ha pista a la que saltar");
             return;
         }
 
         final String[] args = ctx.getArgs();
 
-        if (args.length == 0){
+        if (args.length == 0) {
             musicManager.scheduler.nextTrack();
-        }else if (args.length > 1){
-            ctx.getEvent().getChannel().sendMessage("Posa nomes un argument, per a mes ajuda `!help skip`").queue();
+        } else if (args.length > 1) {
+            ctx.sendChannelMessage("Posa nomes un argument, per a mes ajuda `!help skip`");
             return;
-        }else{
+        } else {
             final int pos = Integer.parseInt(args[0]);
 
-            if (pos <= musicManager.scheduler.getQueue().size() && pos > 0){
+            if (pos <= musicManager.scheduler.getQueue().size() && pos > 0) {
                 musicManager.scheduler.nextTrack(pos);
-            }else{
-                ctx.getEvent().getChannel().sendMessageFormat("No hi ha cap canço a la posicio **%s** de la cua", pos).queue();
+            } else {
+                ctx.sendChannelMessage(String.format("No hi ha cap canço a la posicio **%s** de la cua", pos));
                 return;
             }
         }
 
-        ctx.getEvent().getChannel().sendMessageFormat("Saltant a la canço: `%s`", musicManager.audioPlayer.getPlayingTrack().getInfo().title).queue();
+        ctx.sendChannelMessage(String.format("Saltant a la canço: `%s`", musicManager.audioPlayer.getPlayingTrack().getInfo().title));
     }
 
     @Override

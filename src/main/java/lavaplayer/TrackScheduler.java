@@ -30,7 +30,7 @@ public class TrackScheduler extends AudioEventAdapter {
     }
 
     public void nextTrack(int position) {
-        for (int i = 0 ; i < position - 1 ; i++){
+        for (int i = 0; i < position - 1; i++) {
             this.player.startTrack(this.queue.poll(), false);
         }
         this.player.startTrack(this.queue.poll(), false);
@@ -43,7 +43,7 @@ public class TrackScheduler extends AudioEventAdapter {
         }
     }
 
-    public BlockingQueue<AudioTrack> getQueue(){
+    public BlockingQueue<AudioTrack> getQueue() {
         return queue;
     }
 
