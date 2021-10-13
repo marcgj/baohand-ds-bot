@@ -9,31 +9,31 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.managers.AudioManager;
 
 import java.awt.*;
 
 public class ClearQueueCommand implements ICommand {
+    @SuppressWarnings("ConstantConditions")
     @Override
     public void handle(CommandContext ctx) {
-        final GuildMusicManager manager = PlayerManager.getInstance().getMusicManager(ctx.getEvent().getGuild());
+        final GuildMusicManager manager = PlayerManager.getInstance().getMusicManager(ctx.getGuild());
 
-        final TextChannel channel = ctx.getEvent().getChannel();
-        final Member self = ctx.getEvent().getGuild().getSelfMember();
+        final TextChannel channel = ctx.getChannel();
+        final Member self = ctx.getSelfMember();
         final GuildVoiceState selfVoiceState = self.getVoiceState();
 
 
-        final Member member = ctx.getEvent().getMember();
+        final Member member = ctx.getMember();
         final GuildVoiceState memberVoiceState = member.getVoiceState();
 
         // Checks if the member is in a voice channel
         if (!memberVoiceState.inVoiceChannel()) {
-            ctx.getEvent().getChannel().sendMessage("Entra en una sala de veu").queue();
+            ctx.sendChannelMessage("Entra en una sala de veu");
             return;
         }
         // Checks if the member is in the same voice channel
         if (!memberVoiceState.getChannel().equals(selfVoiceState.getChannel())) {
-            ctx.getEvent().getChannel().sendMessage("Has de estar en el mateix canal de veu que el bot...").queue();
+            ctx.sendChannelMessage("Has de estar en el mateix canal de veu que el bot...");
             return;
         }
 
@@ -45,7 +45,7 @@ public class ClearQueueCommand implements ICommand {
         // Checks if there are songs in the queue
         if (queueSize <= 0) {
             builder.setTitle("La cua esta buida");
-        }else {
+        } else {
 
             manager.scheduler.getQueue().clear();
 
@@ -53,7 +53,7 @@ public class ClearQueueCommand implements ICommand {
             builder.setTitle(String.format("Borrant **%s** %s de la cua", queueSize, twoOptions));
         }
 
-        ctx.getEvent().getChannel().sendMessage(builder.build()).queue();
+        ctx.sendChannelMessage(builder.build());
 
 
     }

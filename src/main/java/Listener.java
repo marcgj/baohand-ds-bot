@@ -1,8 +1,6 @@
 import command.CommandContext;
 import command.CommandManager;
-import command.ICommand;
 import command.commands.music.QueueCommand;
-import io.github.cdimascio.dotenv.Dotenv;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.events.interaction.ButtonClickEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
