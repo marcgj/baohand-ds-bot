@@ -1,5 +1,6 @@
 package command.commands.music;
 
+import Utils.EmbedTemplate;
 import command.CommandContext;
 import command.ICommand;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
@@ -16,7 +17,7 @@ public class LeaveCommand implements ICommand {
 
         // Checks if the bot is in a voice channel
         if (!selfVoiceState.inVoiceChannel()) {
-            ctx.getChannel().sendMessage("El bot no esta a cap canal de veu").queue();
+            ctx.sendChannelMessage(EmbedTemplate.ErrorEmbed("Error al sortir de la sala", "El bot no esta a cap canal de veu"));
             return;
         }
 
@@ -25,12 +26,12 @@ public class LeaveCommand implements ICommand {
 
         // Checks if the member is in a voice channel
         if (!memberVoiceState.inVoiceChannel()) {
-            ctx.sendChannelMessage("Entra en una sala de veu");
+            ctx.sendChannelMessage(EmbedTemplate.ErrorEmbed("Error al sortir de la sala", "Has d'estar primer en una sala de veu"));
             return;
         }
         // Checks if the member is in the same voice channel
         if (!memberVoiceState.getChannel().equals(selfVoiceState.getChannel())) {
-            ctx.sendChannelMessage("Has de estar en el mateix canal de veu que el bot...");
+            ctx.sendChannelMessage(EmbedTemplate.ErrorEmbed("Error al sortir de la sala", "Has d'estar en la mateixa sala de veu que el bot"));
             return;
         }
 

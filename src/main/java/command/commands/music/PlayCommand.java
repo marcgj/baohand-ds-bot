@@ -1,5 +1,6 @@
 package command.commands.music;
 
+import Utils.EmbedTemplate;
 import command.CommandContext;
 import command.ICommand;
 import lavaplayer.PlayerManager;
@@ -22,7 +23,7 @@ public class PlayCommand implements ICommand {
 
         // Checks if there are args
         if (ctx.getArgs().length == 0) {
-            ctx.sendChannelMessage("Potser que posis algo despres del play, no?");
+            ctx.sendChannelMessage(EmbedTemplate.ErrorEmbed("Error", "Has de posar algo mes despres del play...", "`/help play` per a mes ajuda"));
             return;
         }
 
@@ -32,7 +33,7 @@ public class PlayCommand implements ICommand {
 
         // Checks if  the user is in a voice channel
         if (!memberVoiceState.inVoiceChannel()) {
-            ctx.sendChannelMessage("Entra en una sala de veu");
+            ctx.sendChannelMessage(EmbedTemplate.ErrorEmbed("Error", "Entra en una sala de veu"));
             return;
         }
 
@@ -46,7 +47,7 @@ public class PlayCommand implements ICommand {
         // Checks if  the user is in the same voice channel as the bot
         else if (!memberVoiceState.getChannel().equals(selfVoiceState.getChannel())) {
 
-            ctx.sendChannelMessage("Has de estar en el mateix canal de veu que el bot...");
+            ctx.sendChannelMessage(EmbedTemplate.ErrorEmbed("Error", "Has d'estar en el mateix canal de veu que el bot"));
             return;
         }
 
