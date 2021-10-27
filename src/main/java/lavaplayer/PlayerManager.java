@@ -1,5 +1,6 @@
 package lavaplayer;
 
+import Utils.EmbedTemplate;
 import Utils.ThumbnailExtractor;
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
@@ -59,18 +60,7 @@ public class PlayerManager {
             public void trackLoaded(AudioTrack audioTrack) {
                 musicManager.scheduler.queue(audioTrack);
 
-                EmbedBuilder builder = new EmbedBuilder()
-                        .setColor(Color.decode(Dotenv.load().get("QUOTE_COLOR")));
-
-                if (musicManager.scheduler.getQueue().size() == 0) {
-                    builder.setTitle("<a:rythmicalparrot:896052037324771348> Reproduint:");
-                } else {
-                    builder.setTitle("Posant a la cua:");
-                }
-
-                builder.setDescription(String.format("[`%s`](%s)", audioTrack.getInfo().title, audioTrack.getInfo().uri));
-                builder.setThumbnail(ThumbnailExtractor.getThumbnailUrl(audioTrack.getInfo().uri));
-                channel.sendMessage(builder.build()).queue();
+                channel.sendMessage(EmbedTemplate.fromAudioTrack(audioTrack, musicManager)).queue();
             }
 
             @Override
@@ -82,16 +72,11 @@ public class PlayerManager {
                     return;
                 }
 
-
                 for (final AudioTrack track : tracks) {
                     musicManager.scheduler.queue(track);
                 }
 
-                if (musicManager.scheduler.getQueue().size() == 0) {
-                    channel.sendMessage("Reproduint la playlist: `" + audioPlaylist.getName() + "`").queue();
-                } else {
-                    channel.sendMessage("Posant a la cua la playlist: `" + audioPlaylist.getName() + "`").queue();
-                }
+                channel.sendMessage(EmbedTemplate.fromPlayList(audioPlaylist, tracks.get(0).getInfo().uri)).queue();
             }
 
             @Override
