@@ -43,6 +43,7 @@ public class Listener extends ListenerAdapter {
     }
 
     // Auto disconnect if empty
+    /*
     @Override
     public void onGuildVoiceLeave(@NotNull GuildVoiceLeaveEvent event) {
         var self = event.getGuild().getSelfMember();
@@ -58,6 +59,7 @@ public class Listener extends ListenerAdapter {
 
         event.getGuild().getAudioManager().closeAudioConnection();
     }
+    */
 
     @Override
     public void onReady(@NotNull ReadyEvent event) {
