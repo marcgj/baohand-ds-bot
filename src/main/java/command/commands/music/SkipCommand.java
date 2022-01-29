@@ -43,7 +43,7 @@ public class SkipCommand implements ICommand {
         final AudioPlayer audioPlayer = musicManager.audioPlayer;
 
         // Checks if there are songs in the queue
-        if (audioPlayer.getPlayingTrack() == null) {
+        if (musicManager.scheduler.getQueue().size() == 0) {
             ctx.sendChannelMessage("No hi ha pista a la que saltar");
             return;
         }
@@ -66,7 +66,7 @@ public class SkipCommand implements ICommand {
             }
         }
 
-        ctx.sendChannelMessage(String.format("Saltant a la canço: `%s`", musicManager.audioPlayer.getPlayingTrack().getInfo().title));
+        ctx.sendChannelMessage(String.format("Saltant a la canço: `%s`", audioPlayer.getPlayingTrack().getInfo().title));
     }
 
     @Override
