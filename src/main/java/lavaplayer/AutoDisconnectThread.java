@@ -4,7 +4,7 @@ import net.dv8tion.jda.api.managers.AudioManager;
 
 import java.util.concurrent.BlockingQueue;
 
-public class AutodisconectThread extends Thread{
+public class AutoDisconnectThread extends Thread{
 
     private final long TIMEOUT;
     private final BlockingQueue<?> queue;
@@ -12,7 +12,7 @@ public class AutodisconectThread extends Thread{
     private final AudioManager manager;
 
 
-    public AutodisconectThread(long timeout, BlockingQueue<?> queue, AudioManager manager) {
+    public AutoDisconnectThread(long timeout, BlockingQueue<?> queue, AudioManager manager) {
         this.TIMEOUT = timeout;
         this.queue = queue;
         this.manager = manager;
@@ -31,5 +31,6 @@ public class AutodisconectThread extends Thread{
             }
         }
         manager.closeAudioConnection();
+        interrupt();
     }
 }

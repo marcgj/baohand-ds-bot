@@ -7,10 +7,8 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import io.github.cdimascio.dotenv.Dotenv;
 import net.dv8tion.jda.api.managers.AudioManager;
 
-import javax.swing.*;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.TimeUnit;
 
 public class TrackScheduler extends AudioEventAdapter {
 
@@ -19,19 +17,20 @@ public class TrackScheduler extends AudioEventAdapter {
 
     public static final Dotenv dotenv = Dotenv.load();
 
-    private AutodisconectThread autodisconectThread;
-
     private static final long TIMEOUT = Long.parseLong(dotenv.get("VOICE_TIMEOUT"));
+
+    private final AudioManager manager;
 
     public TrackScheduler(AudioPlayer player, AudioManager manager) {
         this.player = player;
         this.queue = new LinkedBlockingQueue<>();
-        this.autodisconectThread = new AutodisconectThread(TIMEOUT, queue, manager);
+        this.manager = manager;
     }
 
     @Override
     public void onTrackEnd(AudioPlayer player, AudioTrack audioTrack, AudioTrackEndReason endReason) {
         if (endReason.mayStartNext) {
+            var autodisconectThread = new AutoDisconnectThread(TIMEOUT, queue, manager);
             autodisconectThread.start();
             nextTrack();
         }
