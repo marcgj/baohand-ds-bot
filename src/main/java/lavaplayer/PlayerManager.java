@@ -22,7 +22,6 @@ import java.util.Map;
 public class PlayerManager {
     private static PlayerManager INSTANCE;
 
-
     private final Map<Long, GuildMusicManager> musicManagers;
     private final AudioPlayerManager audioPlayerManager;
 
@@ -44,7 +43,7 @@ public class PlayerManager {
 
     public GuildMusicManager getMusicManager(Guild guild) {
         return this.musicManagers.computeIfAbsent(guild.getIdLong(), (guildId) -> {
-            final GuildMusicManager guildMusicManager = new GuildMusicManager(this.audioPlayerManager);
+            final GuildMusicManager guildMusicManager = new GuildMusicManager(this.audioPlayerManager, guild.getAudioManager());
 
             guild.getAudioManager().setSendingHandler(guildMusicManager.getSendHandler());
 
@@ -86,7 +85,8 @@ public class PlayerManager {
 
             @Override
             public void loadFailed(FriendlyException e) {
-
+                channel.sendMessage(
+                        EmbedTemplate.ErrorEmbed("ERROR: No s'ha pogut cargar la canço", e.getMessage())).queue();
             }
         });
     }

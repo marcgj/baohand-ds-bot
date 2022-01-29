@@ -4,34 +4,48 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
+import io.github.cdimascio.dotenv.Dotenv;
+import net.dv8tion.jda.api.managers.AudioManager;
 
+import javax.swing.*;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 
 public class TrackScheduler extends AudioEventAdapter {
 
     private final AudioPlayer player;
     private final BlockingQueue<AudioTrack> queue;
 
-    public TrackScheduler(AudioPlayer player) {
+    public static final Dotenv dotenv = Dotenv.load();
+
+    private AutodisconectThread autodisconectThread;
+
+    private static final long TIMEOUT = Long.parseLong(dotenv.get("VOICE_TIMEOUT"));
+
+    public TrackScheduler(AudioPlayer player, AudioManager manager) {
         this.player = player;
         this.queue = new LinkedBlockingQueue<>();
+        this.autodisconectThread = new AutodisconectThread(TIMEOUT, queue, manager);
     }
 
     @Override
-    public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
+    public void onTrackEnd(AudioPlayer player, AudioTrack audioTrack, AudioTrackEndReason endReason) {
         if (endReason.mayStartNext) {
+            autodisconectThread.start();
             nextTrack();
         }
     }
 
     public void nextTrack() {
-        this.player.startTrack(this.queue.poll(), false);
+        var track = this.queue.poll();
+        System.out.println(track);
+        this.player.startTrack(track, false);
     }
 
     public void nextTrack(int position) {
         for (int i = 0; i < position - 1; i++) {
-            this.player.startTrack(this.queue.poll(), false);
+            this.queue.poll();
         }
         this.player.startTrack(this.queue.poll(), false);
     }
