@@ -22,14 +22,14 @@ public class TrackScheduler extends AudioEventAdapter {
 
     private final AudioManager manager;
 
-    private volatile AutoDisconnectThread disconnectThread;
 
     public TrackScheduler(AudioPlayer player, AudioManager manager) {
         this.player = player;
         this.queue = new LinkedBlockingQueue<>();
         this.manager = manager;
-        this.disconnectThread = null;
     }
+
+    private volatile AutoDisconnectThread disconnectThread;
 
     @Override
     public void onTrackEnd(AudioPlayer player, AudioTrack audioTrack, AudioTrackEndReason endReason) {
@@ -56,7 +56,6 @@ public class TrackScheduler extends AudioEventAdapter {
     @SuppressWarnings("ResultOfMethodCallIgnored")
     public void queue(AudioTrack track) {
         System.out.println("New audio track: " + track.getInfo().title);
-        disconnectThread.stopThread();
         if (!this.player.startTrack(track, true)) {
             this.queue.offer(track);
         }

@@ -38,7 +38,7 @@ public class AutoDisconnectThread extends Thread{
         }
     }
 
-    public void stopThread(){
+    public synchronized void stopThread(){
         running = false;
     }
 }
