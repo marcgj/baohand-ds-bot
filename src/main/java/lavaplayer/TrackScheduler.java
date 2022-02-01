@@ -56,6 +56,7 @@ public class TrackScheduler extends AudioEventAdapter {
     @SuppressWarnings("ResultOfMethodCallIgnored")
     public void queue(AudioTrack track) {
         System.out.println("New audio track: " + track.getInfo().title);
+        disconnectThread.stopThread();
         if (!this.player.startTrack(track, true)) {
             this.queue.offer(track);
         }
