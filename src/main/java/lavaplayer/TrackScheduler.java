@@ -7,6 +7,7 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import io.github.cdimascio.dotenv.Dotenv;
 import net.dv8tion.jda.api.managers.AudioManager;
 
+import java.util.PrimitiveIterator;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -21,18 +22,19 @@ public class TrackScheduler extends AudioEventAdapter {
 
     private final AudioManager manager;
 
+    private volatile AutoDisconnectThread disconnectThread;
+
     public TrackScheduler(AudioPlayer player, AudioManager manager) {
         this.player = player;
         this.queue = new LinkedBlockingQueue<>();
         this.manager = manager;
+        this.disconnectThread = null;
     }
-
-    private AutoDisconnectThread disconnectThread;
 
     @Override
     public void onTrackEnd(AudioPlayer player, AudioTrack audioTrack, AudioTrackEndReason endReason) {
         if (endReason.mayStartNext) {
-            disconnectThread = new AutoDisconnectThread(TIMEOUT, queue, manager);
+            var disconnectThread = new AutoDisconnectThread(TIMEOUT, queue, manager);
             disconnectThread.start();
             nextTrack();
         }
@@ -53,7 +55,7 @@ public class TrackScheduler extends AudioEventAdapter {
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
     public void queue(AudioTrack track) {
-        disconnectThread.interrupt();
+        System.out.println("New audio track: " + track.getInfo().title);
         if (!this.player.startTrack(track, true)) {
             this.queue.offer(track);
         }

@@ -2,6 +2,7 @@ package lavaplayer;
 
 import net.dv8tion.jda.api.managers.AudioManager;
 
+import javax.xml.stream.FactoryConfigurationError;
 import java.util.concurrent.BlockingQueue;
 
 public class AutoDisconnectThread extends Thread{
@@ -19,18 +20,25 @@ public class AutoDisconnectThread extends Thread{
 
     }
 
+    private boolean running = true;
+
     @Override
     public void run() {
-        for (int i = 0; i < TIMEOUT; i++){
-            var track = queue.peek();
-            if(track != null) return;
-            try{
-                sleep(1000);
-            } catch (Exception e){
-                return;
+        while (running){
+            for (int i = 0; i < TIMEOUT; i++){
+                var track = queue.peek();
+                if(track != null) return;
+                try{
+                    sleep(1000);
+                } catch (Exception e){
+                    return;
+                }
             }
+            running = false;
         }
-        manager.closeAudioConnection();
-        interrupt();
+    }
+
+    public void stopThread(){
+        running = false;
     }
 }
