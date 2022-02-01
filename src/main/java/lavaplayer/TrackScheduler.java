@@ -27,11 +27,13 @@ public class TrackScheduler extends AudioEventAdapter {
         this.manager = manager;
     }
 
+    private AutoDisconnectThread disconnectThread;
+
     @Override
     public void onTrackEnd(AudioPlayer player, AudioTrack audioTrack, AudioTrackEndReason endReason) {
         if (endReason.mayStartNext) {
-            var autodisconectThread = new AutoDisconnectThread(TIMEOUT, queue, manager);
-            autodisconectThread.start();
+            disconnectThread = new AutoDisconnectThread(TIMEOUT, queue, manager);
+            disconnectThread.start();
             nextTrack();
         }
     }
@@ -51,6 +53,7 @@ public class TrackScheduler extends AudioEventAdapter {
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
     public void queue(AudioTrack track) {
+        disconnectThread.interrupt();
         if (!this.player.startTrack(track, true)) {
             this.queue.offer(track);
         }
