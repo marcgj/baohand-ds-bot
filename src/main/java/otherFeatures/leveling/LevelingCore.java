@@ -7,7 +7,7 @@ import org.w3c.dom.events.Event;
 import postgres.methods.LevelingController;
 
 public class LevelingCore {
-    public static void handle(GuildMessageReceivedEvent event){
+    public synchronized static void handle(GuildMessageReceivedEvent event){
         var message = event.getMessage();
         var user = event.getAuthor();
 
@@ -15,11 +15,12 @@ public class LevelingCore {
 
         if(!LevelingController.addNewMessage(message)) System.out.println("Error adding message");
 
+        int level = LevelingController.getUserLevel(user);
+        int messageCount = LevelingController.getMessageCount(user);
+        int rank = LevelingController.getUserRank(user);
+
         if(LevelingController.nextLevel(user)){
-            LevelingController.levelUp(user);
-            int level = LevelingController.getUserLevel(user);
-            int messageCount = LevelingController.getMessageCount(user);
-            int rank = LevelingController.getUserRank(user);
+           LevelingController.levelUp(user);
             event.getChannel().sendMessage(EmbedTemplate.levelUpEmbed(user, level, messageCount, rank)).queue();
         }
     }

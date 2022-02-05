@@ -19,6 +19,7 @@ public class DatabaseController extends Thread{
     public static DatabaseController getInstance(){
         if (INSTANCE == null){
             INSTANCE = new DatabaseController();
+            INSTANCE.start();
         }
         return INSTANCE;
     }

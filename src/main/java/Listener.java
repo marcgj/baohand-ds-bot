@@ -13,6 +13,7 @@ import postgres.DatabaseController;
 
 public class Listener extends ListenerAdapter {
     private final CommandManager manager = CommandManager.getInstance();
+    private final LevelingCore levelingCore = new LevelingCore();
 
     @Override
     public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
@@ -28,8 +29,6 @@ public class Listener extends ListenerAdapter {
 
     @Override
     public void onButtonClick(@NotNull ButtonClickEvent event) {
-
-
         switch (event.getComponentId()) {
             case "forward" -> {
                 CommandContext ctx = new CommandContext(event, new String[0]);
