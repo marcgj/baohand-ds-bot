@@ -34,7 +34,6 @@ public class CommandManager {
     }
 
     public static CommandManager getInstance() {
-
         if (INSTANCE == null) {
             INSTANCE = new CommandManager();
         }

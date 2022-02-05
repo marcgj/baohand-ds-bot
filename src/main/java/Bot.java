@@ -4,6 +4,7 @@ import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
+import postgres.DatabaseController;
 
 import javax.security.auth.login.LoginException;
 
@@ -13,7 +14,6 @@ public class Bot {
 
     private static final String TOKEN = dotenv.get("API_KEY");
     public static JDA jda;
-
 
     public static void main(String[] args) throws LoginException, InterruptedException {
         //Start the server

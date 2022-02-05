@@ -8,6 +8,8 @@ import net.dv8tion.jda.api.events.interaction.ButtonClickEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
+import otherFeatures.leveling.LevelingCore;
+import postgres.DatabaseController;
 
 public class Listener extends ListenerAdapter {
     private final CommandManager manager = CommandManager.getInstance();
@@ -20,6 +22,8 @@ public class Listener extends ListenerAdapter {
         if (event.getMessage().getContentRaw().startsWith(Bot.dotenv.get("PREFIX"))) {
             manager.handle(event);
         }
+
+        LevelingCore.handle(event);
     }
 
     @Override
@@ -64,5 +68,8 @@ public class Listener extends ListenerAdapter {
     @Override
     public void onReady(@NotNull ReadyEvent event) {
         System.out.println("Bot ONLINE!");
+
+        // Once the bot is started we connect to the database
+        DatabaseController.getInstance();
     }
 }
