@@ -3,16 +3,11 @@ package command.commands.music;
 import Utils.EmbedTemplate;
 import command.CommandContext;
 import command.ICommand;
-import io.github.cdimascio.dotenv.Dotenv;
 import lavaplayer.GuildMusicManager;
 import lavaplayer.PlayerManager;
-import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.entities.templates.Template;
-
-import java.awt.*;
 
 public class ClearQueueCommand implements ICommand {
     @SuppressWarnings("ConstantConditions")
@@ -48,7 +43,7 @@ public class ClearQueueCommand implements ICommand {
             manager.scheduler.getQueue().clear();
 
             final String twoOptions = queueSize > 1 ? "cançons" : "canço";
-            ctx.sendChannelMessage(EmbedTemplate.GeneralEmbed("Netejant la cua:",
+            ctx.sendChannelMessage(EmbedTemplate.generalEmbed("Netejant la cua:",
                     String.format("Borrant **%s** %s de la cua", queueSize, twoOptions)));
         }
 
