@@ -15,12 +15,12 @@ public class LevelingCore {
 
         if(!LevelingController.addNewMessage(message)) System.out.println("Error adding message");
 
-        int level = LevelingController.getUserLevel(user);
-        int messageCount = LevelingController.getMessageCount(user);
-        int rank = LevelingController.getUserRank(user);
 
         if(LevelingController.nextLevel(user)){
-           LevelingController.levelUp(user);
+            LevelingController.levelUp(user);
+            int level = LevelingController.getUserLevel(user);
+            int messageCount = LevelingController.getMessageCount(user);
+            int rank = LevelingController.getUserRank(user);
             event.getChannel().sendMessage(EmbedTemplate.levelUpEmbed(user, level, messageCount, rank)).queue();
         }
     }
