@@ -8,6 +8,7 @@ import postgres.DatabaseController;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.LinkedList;
 
 public class LevelingController {
 
@@ -124,4 +125,42 @@ public class LevelingController {
             return -1;
         }
     }
+
+    public static class Triplet{
+        public int rank;
+        public int messageCount;
+        public String name;
+
+        private Triplet(int rank, int messageCount, String name){
+            this.rank = rank;
+            this.messageCount = messageCount;
+            this.name = name;
+        }
+    }
+
+    public static LinkedList<Triplet> getRanking() {
+        var list = new LinkedList<Triplet>();
+
+        Statement statement;
+        try {
+            statement = conn.createStatement();
+            var result = statement.executeQuery("select name, messageCount, rank() " +
+                    "over (order by messageCount desc) from users");
+
+            while(result.next()){
+                var rank = result.getInt("rank");
+                var messageCount = result.getInt("messagecount");
+                var name = result.getString("name");
+
+                System.out.println(name);
+                var triplet = new Triplet(rank, messageCount, name);
+                list.add(triplet);
+            }
+            return list;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 }
