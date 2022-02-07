@@ -2,6 +2,7 @@ package command;
 
 import command.commands.HelpCommand;
 import command.commands.HugCommand;
+import command.commands.RankCommand;
 import command.commands.ShutdownCommand;
 import command.commands.music.*;
 import io.github.cdimascio.dotenv.Dotenv;
@@ -31,10 +32,12 @@ public class CommandManager {
         commands.add(new LeaveCommand());
         commands.add(new ClearQueueCommand());
 
+        // Leveling commands
+        commands.add(new RankCommand());
+
     }
 
     public static CommandManager getInstance() {
-
         if (INSTANCE == null) {
             INSTANCE = new CommandManager();
         }

@@ -65,6 +65,41 @@ public class TrackScheduler extends AudioEventAdapter {
         return queue;
     }
 
+    private static class AutoDisconnectThread extends Thread{
+
+        private final long TIMEOUT;
+        private final BlockingQueue<?> queue;
+
+
+        public AutoDisconnectThread(long timeout, BlockingQueue<?> queue, AudioManager manager) {
+            this.TIMEOUT = timeout;
+            this.queue = queue;
+
+        }
+
+        private boolean running = true;
+
+        @Override
+        public void run() {
+            while (running){
+                for (int i = 0; i < TIMEOUT; i++){
+                    var track = queue.peek();
+                    if(track != null) return;
+                    try{
+                        sleep(1000);
+                    } catch (Exception e){
+                        return;
+                    }
+                }
+                running = false;
+            }
+        }
+
+        public synchronized void stopThread(){
+            running = false;
+        }
+    }
+
     /*
 
     @Override

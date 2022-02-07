@@ -3,7 +3,6 @@ package command.commands.music;
 import Utils.EmbedTemplate;
 import command.CommandContext;
 import command.ICommand;
-import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -35,7 +34,7 @@ public class JoinCommand implements ICommand {
         final VoiceChannel memberChannel = memberVoiceState.getChannel();
 
         audioManager.openAudioConnection(memberChannel);
-        channel.sendMessage(EmbedTemplate.GeneralEmbed("", "Entrant a: `" + memberChannel.getName() + "`")).queue();
+        channel.sendMessage(EmbedTemplate.generalEmbed("", "Entrant a: `" + memberChannel.getName() + "`")).queue();
     }
 
     @Override

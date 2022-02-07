@@ -6,8 +6,10 @@ import io.github.cdimascio.dotenv.Dotenv;
 import lavaplayer.GuildMusicManager;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.entities.User;
 
 import java.awt.*;
+import java.awt.font.GraphicAttribute;
 
 public class EmbedTemplate {
 
@@ -74,7 +76,7 @@ public class EmbedTemplate {
     // General purpose
     // #######################
 
-    public static MessageEmbed GeneralEmbed (String title, String msg){
+    public static MessageEmbed generalEmbed(String title, String msg){
         final EmbedBuilder builder = new EmbedBuilder();
         builder.setColor(Color.decode(Dotenv.load().get("QUOTE_COLOR")));
         builder.setTitle(title);
@@ -83,4 +85,12 @@ public class EmbedTemplate {
         return builder.build();
     }
 
+    public static MessageEmbed levelUpEmbed(User user, int level, int messageCount, int rank){
+        final EmbedBuilder builder = new EmbedBuilder();
+        builder.setColor(Color.decode(Dotenv.load().get("QUOTE_COLOR")));
+        builder.setTitle(String.format("Enhorabona **%s** ara ets un maricon de categoria %d", user.getName(), level));
+        builder.setDescription(String.format("<@%d> ja has enviat **%d** missatges, i estas en la posicio **#%d**", user.getIdLong(), messageCount, rank));
+
+        return builder.build();
+    }
 }
