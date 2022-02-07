@@ -1,6 +1,7 @@
 package otherFeatures.leveling;
 
 import Utils.EmbedTemplate;
+import net.dv8tion.jda.api.entities.SelfUser;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import org.w3c.dom.events.Event;
@@ -11,7 +12,11 @@ public class LevelingCore {
         var message = event.getMessage();
         var user = event.getAuthor();
 
-        if (LevelingController.addUser(user)) System.out.println("New user added: " + user.getName());
+        if (LevelingController.addUser(user)){
+            System.out.println("New user added: " + user.getName());
+        }else {
+            //System.out.println("Error adding user: " + user.getName());
+        }
 
         if(!LevelingController.addNewMessage(message)) System.out.println("Error adding message");
 

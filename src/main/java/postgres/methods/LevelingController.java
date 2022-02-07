@@ -46,11 +46,11 @@ public class LevelingController {
     // If in the future we need the contents of a message we can use the id and jda to get it
     public static boolean addNewMessage(Message msg){
         long userId = msg.getAuthor().getIdLong();
-        long messageId = msg.getIdLong();
+        //long messageId = msg.getIdLong();
 
         try{
             var statement = conn.createStatement();
-            statement.executeUpdate(String.format("insert into messages (id, userid) VALUES (%d, %d);", messageId, userId));
+            //statement.executeUpdate(String.format("insert into messages (id, userid) VALUES (%d, %d);", messageId, userId));
             statement.executeUpdate(String.format("update users set messageCount = 1 + users.messageCount where id = %d;", userId));
             return true;
         }catch (Exception e){
@@ -76,11 +76,10 @@ public class LevelingController {
 
     public static void levelUp(User user){
         long userId = user.getIdLong();
-        int userLevel = getUserLevel(user);
 
         try{
             var statement = conn.createStatement();
-            statement.executeUpdate(String.format("update users set level = %d where id = %d;", userLevel + 1, userId));
+            statement.executeUpdate(String.format("update users set level = level + 1 where id = %d;", userId));
         }catch (Exception e){
             System.out.printf("Error leveling up user: %s", user.getName());
         }

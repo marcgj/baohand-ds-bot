@@ -1,5 +1,7 @@
 package postgres;
 
+import io.github.cdimascio.dotenv.Dotenv;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -10,6 +12,7 @@ public class DatabaseController extends Thread{
     private static DatabaseController INSTANCE;
     private Connection conn;
 
+    private final Dotenv dotenv = Dotenv.load();
     public Connection getConn() {
         return conn;
     }
@@ -26,11 +29,11 @@ public class DatabaseController extends Thread{
 
     public DatabaseController() {
         try {
-            String url = "jdbc:postgresql://localhost/test";
+            String url = dotenv.get("JDBC_STRING");
 
             Properties props = new Properties();
-            props.setProperty("user", "postgres");
-            props.setProperty("password", "1234");
+            props.setProperty("user", dotenv.get("JDBC_USER"));
+            props.setProperty("password", dotenv.get("JDBC_PASSWORD"));
 
             conn = DriverManager.getConnection(url, props);
 
