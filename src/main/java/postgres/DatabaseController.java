@@ -10,7 +10,7 @@ import java.util.Properties;
 public class DatabaseController extends Thread{
 
     private static DatabaseController INSTANCE;
-    private Connection conn;
+    private final Connection conn;
 
     private final Dotenv dotenv = Dotenv.load();
     public Connection getConn() {
