@@ -1,4 +1,4 @@
-package otherFeatures.leveling;
+package postgres;
 
 import Utils.EmbedTemplate;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
