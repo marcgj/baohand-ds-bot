@@ -20,7 +20,20 @@ public class TrackScheduler extends AudioEventAdapter {
 
     private static final long TIMEOUT = Long.parseLong(dotenv.get("VOICE_TIMEOUT"));
 
+    private AudioTrack actualTrack;
+
     private final AudioManager manager;
+
+    private boolean loop = false;
+
+    public void setLoop(boolean state){
+        loop = state;
+    }
+
+    public boolean toggleLoop(){
+        loop = !loop;
+        return loop;
+    }
 
 
     public TrackScheduler(AudioPlayer player, AudioManager manager) {
@@ -34,15 +47,21 @@ public class TrackScheduler extends AudioEventAdapter {
     @Override
     public void onTrackEnd(AudioPlayer player, AudioTrack audioTrack, AudioTrackEndReason endReason) {
         if (endReason.mayStartNext) {
-            var disconnectThread = new AutoDisconnectThread(TIMEOUT, queue, manager);
-            disconnectThread.start();
+            //var disconnectThread = new AutoDisconnectThread(TIMEOUT, queue, manager);
+            //disconnectThread.start();
             nextTrack();
         }
     }
 
     public void nextTrack() {
-        var track = this.queue.poll();
-        System.out.println(track);
+        AudioTrack track;
+        if (loop)
+            track = actualTrack.makeClone();
+        else
+            track = this.queue.poll();
+
+        assert track != null;
+        System.out.println("Next track: " + track.getInfo().title);
         this.player.startTrack(track, false);
     }
 
@@ -56,13 +75,16 @@ public class TrackScheduler extends AudioEventAdapter {
     @SuppressWarnings("ResultOfMethodCallIgnored")
     public void queue(AudioTrack track) {
         System.out.println("New audio track: " + track.getInfo().title);
-        if (!this.player.startTrack(track, true)) {
+        if (!this.player.startTrack(track, true))
             this.queue.offer(track);
-        }
     }
 
     public BlockingQueue<AudioTrack> getQueue() {
         return queue;
+    }
+
+    public void setActualTrack(AudioTrack actualTrack) {
+        this.actualTrack = actualTrack;
     }
 
     private static class AutoDisconnectThread extends Thread{
