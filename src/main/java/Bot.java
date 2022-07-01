@@ -26,7 +26,6 @@ public class Bot {
 
         //Add Event Listeners
         jda.addEventListener(new Listener());
-
         jda.awaitReady();
     }
 }

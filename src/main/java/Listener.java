@@ -1,14 +1,12 @@
 import command.CommandContext;
 import command.CommandManager;
 import command.commands.music.QueueCommand;
-import net.dv8tion.jda.api.events.DisconnectEvent;
 import net.dv8tion.jda.api.events.ReadyEvent;
-import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.api.events.interaction.ButtonClickEvent;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.jetbrains.annotations.NotNull;
-import otherFeatures.leveling.LevelingCore;
+import postgres.LevelingCore;
 import postgres.DatabaseController;
 
 public class Listener extends ListenerAdapter {
@@ -45,30 +43,11 @@ public class Listener extends ListenerAdapter {
         }
     }
 
-    // Auto disconnect if empty
-    /*
-    @Override
-    public void onGuildVoiceLeave(@NotNull GuildVoiceLeaveEvent event) {
-        var self = event.getGuild().getSelfMember();
-        var selfChannel = self.getVoiceState().getChannel();
-
-        if (selfChannel == null) return;
-
-        var channel = event.getChannelLeft();
-
-        if (!selfChannel.equals(channel)) return;
-
-        if (selfChannel.getMembers().size() > 1) return;
-
-        event.getGuild().getAudioManager().closeAudioConnection();
-    }
-    */
-
     @Override
     public void onReady(@NotNull ReadyEvent event) {
         System.out.println("Bot ONLINE!");
-
         // Once the bot is started we connect to the database
         DatabaseController.getInstance();
+
     }
 }

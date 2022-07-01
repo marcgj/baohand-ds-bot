@@ -31,6 +31,7 @@ public class CommandManager {
         commands.add(new SkipCommand());
         commands.add(new LeaveCommand());
         commands.add(new ClearQueueCommand());
+        commands.add(new LoopCommand());
 
         // Leveling commands
         commands.add(new RankCommand());
