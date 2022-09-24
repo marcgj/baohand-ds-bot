@@ -97,10 +97,4 @@ public class CommandContext {
     public AudioManager getAudioManager() {
         return getGuild().getAudioManager();
     }
-
-    // ###############################
-    // Button Only Methods
-    // ###############################
-
-
 }

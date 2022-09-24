@@ -12,13 +12,13 @@ import java.util.LinkedList;
 
 public class LevelingController {
 
+    private static final Dotenv dotenv = Dotenv.load();
+    
     private static final Connection conn = DatabaseController.getInstance().getConn();
-
 
     public static boolean addUser (User user){
         long userId = user.getIdLong();
         String userName = user.getName();
-
         try{
             var statement = conn.createStatement();
             statement.executeUpdate(String.format("insert into users (id, name) VALUES (%d, '%s')", userId, userName));
@@ -30,7 +30,7 @@ public class LevelingController {
 
 
     public static int getUserLevel (User user){
-        long userId = user.getIdLong();
+        final long userId = user.getIdLong();
         Statement statement;
         try {
             statement = conn.createStatement();
@@ -45,12 +45,9 @@ public class LevelingController {
 
     // If in the future we need the contents of a message we can use the id and jda to get it
     public static boolean addNewMessage(Message msg){
-        long userId = msg.getAuthor().getIdLong();
-        //long messageId = msg.getIdLong();
-
+        final long userId = msg.getAuthor().getIdLong();
         try{
             var statement = conn.createStatement();
-            //statement.executeUpdate(String.format("insert into messages (id, userid) VALUES (%d, %d);", messageId, userId));
             statement.executeUpdate(String.format("update users set messageCount = 1 + users.messageCount where id = %d;", userId));
             return true;
         }catch (Exception e){
@@ -61,7 +58,7 @@ public class LevelingController {
 
     // Gets the number of messages a user has so we can see if he levels up
     public static int getMessageCount(User user) {
-        long userId = user.getIdLong();
+        final long userId = user.getIdLong();
         Statement statement;
         try {
             statement = conn.createStatement();
@@ -75,7 +72,7 @@ public class LevelingController {
     }
 
     public static void levelUp(User user){
-        long userId = user.getIdLong();
+        final long userId = user.getIdLong();
 
         try{
             var statement = conn.createStatement();
@@ -86,7 +83,7 @@ public class LevelingController {
     }
 
     public static void setLevel(User user, int level){
-        long userId = user.getIdLong();
+        final long userId = user.getIdLong();
 
         try{
             var statement = conn.createStatement();
@@ -96,21 +93,18 @@ public class LevelingController {
         }
     }
 
-
-    private static final Dotenv dotenv = Dotenv.load();
-
     public static boolean nextLevel(User user){
-        int level = getUserLevel(user);
-        int messageCount = getMessageCount(user);
+        final int level = getUserLevel(user);
+        final int messageCount = getMessageCount(user);
 
-        int calculatedLevel = (int) (Float.parseFloat(dotenv.get("LEVELING_RATE")) * Math.sqrt(messageCount));
+        final int calculatedLevel = (int) (Float.parseFloat(dotenv.get("LEVELING_RATE")) * Math.sqrt(messageCount));
 
         return calculatedLevel > level;
     }
 
     public static int getUserRank(User user) {
-        long userId = user.getIdLong();
-        Statement statement;
+        final long userId = user.getIdLong();
+        final Statement statement;
         try {
             statement = conn.createStatement();
             var result = statement.executeQuery(String.format("select * " +
@@ -124,21 +118,22 @@ public class LevelingController {
             return -1;
         }
     }
-
-    public static class Triplet{
+    
+    // Only used for geting the ranking
+    public static class TripletRanking{
         public int rank;
         public int messageCount;
         public String name;
 
-        private Triplet(int rank, int messageCount, String name){
+        private TripletRanking(int rank, int messageCount, String name){
             this.rank = rank;
             this.messageCount = messageCount;
             this.name = name;
         }
     }
 
-    public static LinkedList<Triplet> getRanking() {
-        var list = new LinkedList<Triplet>();
+    public static LinkedList<TripletRanking> getRanking() {
+        final var list = new LinkedList<TripletRanking>();
 
         Statement statement;
         try {
@@ -152,7 +147,7 @@ public class LevelingController {
                 var name = result.getString("name");
 
                 System.out.println(name);
-                var triplet = new Triplet(rank, messageCount, name);
+                var triplet = new TripletRanking(rank, messageCount, name);
                 list.add(triplet);
             }
             return list;

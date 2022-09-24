@@ -43,10 +43,4 @@ public class DatabaseController extends Thread{
             throw new Error("Error connecting the database: ", e);
         }
     }
-
-    public static void main(String[] args) {
-        var test = new DatabaseController();
-        test.start();
-
-    }
 }

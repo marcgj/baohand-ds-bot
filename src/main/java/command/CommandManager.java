@@ -66,7 +66,6 @@ public class CommandManager {
         } else {
             e.getChannel().sendMessageFormat("La comanda **%s** no exesteix", commandName).queue();
         }
-
     }
 
     // Obtains the command whether is a short name or the long one is used
@@ -84,7 +83,6 @@ public class CommandManager {
                 if (command.getName().equals(search)) return command;
             }
         }
-
         return null;
     }
 

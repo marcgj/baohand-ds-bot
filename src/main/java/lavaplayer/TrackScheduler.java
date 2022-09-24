@@ -18,8 +18,6 @@ public class TrackScheduler extends AudioEventAdapter {
 
     public static final Dotenv dotenv = Dotenv.load();
 
-    private static final long TIMEOUT = Long.parseLong(dotenv.get("VOICE_TIMEOUT"));
-
     private AudioTrack actualTrack;
 
     private final AudioManager manager;
@@ -42,15 +40,10 @@ public class TrackScheduler extends AudioEventAdapter {
         this.manager = manager;
     }
 
-    private volatile AutoDisconnectThread disconnectThread;
-
     @Override
     public void onTrackEnd(AudioPlayer player, AudioTrack audioTrack, AudioTrackEndReason endReason) {
-        if (endReason.mayStartNext) {
-            //var disconnectThread = new AutoDisconnectThread(TIMEOUT, queue, manager);
-            //disconnectThread.start();
+        if (endReason.mayStartNext) 
             nextTrack();
-        }
     }
 
     public void nextTrack() {
@@ -86,67 +79,4 @@ public class TrackScheduler extends AudioEventAdapter {
     public void setActualTrack(AudioTrack actualTrack) {
         this.actualTrack = actualTrack;
     }
-
-    private static class AutoDisconnectThread extends Thread{
-
-        private final long TIMEOUT;
-        private final BlockingQueue<?> queue;
-
-
-        public AutoDisconnectThread(long timeout, BlockingQueue<?> queue, AudioManager manager) {
-            this.TIMEOUT = timeout;
-            this.queue = queue;
-
-        }
-
-        private boolean running = true;
-
-        @Override
-        public void run() {
-            while (running){
-                for (int i = 0; i < TIMEOUT; i++){
-                    var track = queue.peek();
-                    if(track != null) return;
-                    try{
-                        sleep(1000);
-                    } catch (Exception e){
-                        return;
-                    }
-                }
-                running = false;
-            }
-        }
-
-        public synchronized void stopThread(){
-            running = false;
-        }
-    }
-
-    /*
-
-    @Override
-    public String toString() {
-        StringBuilder builder = new StringBuilder();
-        int i = 0;
-
-
-        for (AudioTrack t : queue) {
-            int converted = (int) t.getDuration() / 1000;
-
-            int hours = converted / 3600;
-            int remainder = converted - hours * 3600;
-            int mins = remainder / 60;
-            remainder = remainder - mins * 60;
-            int secs = remainder;
-
-            String time = String.format("%s:%s:%s", hours, mins, secs);
-
-            String line = String.format("**%s.**  `%s` - [%s]\n", i + 1, t.getInfo().title, time);
-            builder.append(line);
-            i++;
-        }
-        return builder.toString();
-    }
-
-     */
 }
