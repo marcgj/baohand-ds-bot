@@ -7,7 +7,6 @@ import lavaplayer.GuildMusicManager;
 import lavaplayer.PlayerManager;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.TextChannel;
 
 public class ClearQueueCommand implements ICommand {
     @SuppressWarnings("ConstantConditions")
@@ -15,7 +14,6 @@ public class ClearQueueCommand implements ICommand {
     public void handle(CommandContext ctx) {
         final GuildMusicManager manager = PlayerManager.getInstance().getMusicManager(ctx.getGuild());
 
-        final TextChannel channel = ctx.getChannel();
         final Member self = ctx.getSelfMember();
         final GuildVoiceState selfVoiceState = self.getVoiceState();
 

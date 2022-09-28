@@ -8,7 +8,6 @@ import lavaplayer.PlayerManager;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
-import org.apache.commons.io.monitor.FileAlterationListener;
 
 public class LoopCommand implements ICommand {
 

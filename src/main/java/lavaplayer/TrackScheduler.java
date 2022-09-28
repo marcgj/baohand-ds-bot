@@ -5,9 +5,7 @@ import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import io.github.cdimascio.dotenv.Dotenv;
-import net.dv8tion.jda.api.managers.AudioManager;
 
-import java.util.PrimitiveIterator;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -19,8 +17,6 @@ public class TrackScheduler extends AudioEventAdapter {
     public static final Dotenv dotenv = Dotenv.load();
 
     private AudioTrack actualTrack;
-
-    private final AudioManager manager;
 
     private boolean loop = false;
 
@@ -34,10 +30,9 @@ public class TrackScheduler extends AudioEventAdapter {
     }
 
 
-    public TrackScheduler(AudioPlayer player, AudioManager manager) {
+    public TrackScheduler(AudioPlayer player) {
         this.player = player;
         this.queue = new LinkedBlockingQueue<>();
-        this.manager = manager;
     }
 
     @Override

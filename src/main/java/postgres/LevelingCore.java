@@ -18,7 +18,7 @@ public class LevelingCore {
             int level = LevelingController.getUserLevel(user);
             int messageCount = LevelingController.getMessageCount(user);
             int rank = LevelingController.getUserRank(user);
-            event.getChannel().sendMessage(EmbedTemplate.levelUpEmbed(user, level, messageCount, rank)).queue();
+            event.getChannel().sendMessageEmbeds(EmbedTemplate.levelUpEmbed(user, level, messageCount, rank)).queue();
         }
     }
 

@@ -9,7 +9,6 @@ import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.User;
 
 import java.awt.*;
-import java.awt.font.GraphicAttribute;
 
 public class EmbedTemplate {
 

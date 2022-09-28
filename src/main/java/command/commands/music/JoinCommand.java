@@ -34,7 +34,7 @@ public class JoinCommand implements ICommand {
         final VoiceChannel memberChannel = memberVoiceState.getChannel();
 
         audioManager.openAudioConnection(memberChannel);
-        channel.sendMessage(EmbedTemplate.generalEmbed("", "Entrant a: `" + memberChannel.getName() + "`")).queue();
+        channel.sendMessageEmbeds(EmbedTemplate.generalEmbed("", "Entrant a: `" + memberChannel.getName() + "`")).queue();
     }
 
     @Override

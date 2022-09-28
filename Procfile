@@ -1,1 +1,0 @@
-bot: java -jar heroku/baohand-bot.jar

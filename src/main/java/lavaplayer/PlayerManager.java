@@ -1,7 +1,6 @@
 package lavaplayer;
 
 import Utils.EmbedTemplate;
-import Utils.ThumbnailExtractor;
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
@@ -9,12 +8,9 @@ import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import io.github.cdimascio.dotenv.Dotenv;
-import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
 
-import java.awt.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -59,7 +55,7 @@ public class PlayerManager {
             public void trackLoaded(AudioTrack audioTrack) {
                 musicManager.scheduler.queue(audioTrack);
 
-                channel.sendMessage(EmbedTemplate.fromAudioTrack(audioTrack, musicManager)).queue();
+                channel.sendMessageEmbeds(EmbedTemplate.fromAudioTrack(audioTrack, musicManager)).queue();
             }
 
             @Override
@@ -75,7 +71,7 @@ public class PlayerManager {
                     musicManager.scheduler.queue(track);
                 }
 
-                channel.sendMessage(EmbedTemplate.fromPlayList(audioPlaylist, tracks.get(0).getInfo().uri)).queue();
+                channel.sendMessageEmbeds(EmbedTemplate.fromPlayList(audioPlaylist, tracks.get(0).getInfo().uri)).queue();
             }
 
             @Override
@@ -85,7 +81,7 @@ public class PlayerManager {
 
             @Override
             public void loadFailed(FriendlyException e) {
-                channel.sendMessage(
+                channel.sendMessageEmbeds(
                         EmbedTemplate.ErrorEmbed("ERROR: No s'ha pogut cargar la canço", e.getMessage())).queue();
             }
         });

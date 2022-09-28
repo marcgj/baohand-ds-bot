@@ -64,7 +64,7 @@ public class QueueCommand implements ICommand {
         }
 
         if (queueSize < 10) {
-            ctx.getChannel().sendMessage(builder.build()).queue();
+            ctx.getChannel().sendMessageEmbeds(builder.build()).queue();
             return;
         }
 
@@ -72,9 +72,9 @@ public class QueueCommand implements ICommand {
         Button forward = Button.secondary("forward", ">>");
 
         if (pag <= 0) {
-            ctx.getChannel().sendMessage(builder.build()).setActionRow(forward).queue();
+            ctx.getChannel().sendMessageEmbeds(builder.build()).setActionRow(forward).queue();
         } else if (pag == queueSize / 10) {
-            ctx.getChannel().sendMessage(builder.build()).setActionRow(backward).queue();
+            ctx.getChannel().sendMessageEmbeds(builder.build()).setActionRow(backward).queue();
         } else {
             ctx.getButtonEvent().editMessageEmbeds(builder.build()).setActionRow(backward, forward).queue();
         }

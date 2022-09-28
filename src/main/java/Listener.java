@@ -1,4 +1,3 @@
-import command.Admins;
 import command.CommandContext;
 import command.CommandManager;
 import command.commands.music.QueueCommand;
@@ -26,6 +25,7 @@ public class Listener extends ListenerAdapter {
         LevelingCore.handle(event);
     }
 
+    // Used for queue command where it allows the user to switch between pages
     @Override
     public void onButtonClick(@NotNull ButtonClickEvent event) {
         switch (event.getComponentId()) {

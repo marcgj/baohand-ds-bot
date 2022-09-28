@@ -34,7 +34,7 @@ public class HelpCommand implements ICommand {
             builder.setDescription(cmd.getHelp());
         }
 
-        ctx.getChannel().sendMessage(builder.build()).queue();
+        ctx.getChannel().sendMessageEmbeds(builder.build()).queue();
     }
 
     @Override

@@ -41,7 +41,6 @@ public class PlayCommand implements ICommand {
         if (!selfVoiceState.inVoiceChannel()) {
             final AudioManager audioManager = ctx.getAudioManager();
             final VoiceChannel memberChannel = memberVoiceState.getChannel();
-
             audioManager.openAudioConnection(memberChannel);
         }
         // Checks if  the user is in the same voice channel as the bot

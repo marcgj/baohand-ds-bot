@@ -3,7 +3,6 @@ package command;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Arrays;
 import postgres.DatabaseController;
 
 // TODO: Moureho a base de dades

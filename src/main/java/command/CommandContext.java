@@ -91,7 +91,7 @@ public class CommandContext {
     }
 
     public void sendChannelMessage(MessageEmbed embed) {
-        getChannel().sendMessage(embed).queue();
+        getChannel().sendMessageEmbeds(embed).queue();
     }
 
     public AudioManager getAudioManager() {
