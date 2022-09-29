@@ -2,6 +2,8 @@
 # Compiled class file
 *.class
 
+startbot
+
 # Log file
 *.log
 
