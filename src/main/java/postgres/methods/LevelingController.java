@@ -12,55 +12,6 @@ import java.util.LinkedList;
 
 public class LevelingController {
 
-    static class Query {
-        final Connection conn;
-        final String query;
-
-        public Query(Connection conn, String query) {
-            this.conn = conn;
-            this.query = query;
-        }
-
-        public boolean update() {
-            try {
-                var statement = conn.createStatement();
-                statement.executeUpdate(query);
-                return true;
-            } catch (Exception e) {
-                e.printStackTrace();
-                return false;
-            }
-        }
-
-        public LinkedList<String[]> getColumn(String column) {
-            return getColumns(new String[]{column});
-        }
-
-        public LinkedList<String[]> getColumns(String[] columns) {
-            try {
-                var statement = conn.createStatement();
-                var result = statement.executeQuery(query);
-
-                final LinkedList list = new LinkedList<String[]>();
-                
-                while(result.next()){
-                    String[] tempArr = new String[columns.length];
-                    
-                    int i = 0;
-                    for(var col : columns){
-                        tempArr[i++] = result.getString(col);
-                    }
-                    list.add(tempArr);
-                }
-
-                return list;
-            } catch (Exception e) {
-                e.printStackTrace();
-                return null;
-            }
-        }
-    }
-
     private static final Dotenv dotenv = Dotenv.load();
     private static final Connection conn = DatabaseController.getInstance().getConn();
 
@@ -99,7 +50,7 @@ public class LevelingController {
     public static int getMessageCount(User user) {
         final long userId = user.getIdLong();
         Query query = new Query(conn, String.format("select messageCount from users where id = %d;", userId));
-        return Integer.parseInt(query.getColumn("messagecount").get(0)[0]);
+        return Integer.parseInt(query.getColumn("messagecount").getFirst());
     }
 
     public static void levelUp(User user) {
@@ -130,7 +81,7 @@ public class LevelingController {
         "over (order by messageCount desc) " +
         "from users) as \"ranking\" where id = %d;", userId));
 
-        return Integer.parseInt(query.getColumn("rank").get(0)[0]);
+        return Integer.parseInt(query.getColumn("rank").getFirst());
     }
 
     public static LinkedList<String[]> getRanking() {
