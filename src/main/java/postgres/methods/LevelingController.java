@@ -12,24 +12,67 @@ import java.util.LinkedList;
 
 public class LevelingController {
 
-    private static final Dotenv dotenv = Dotenv.load();
-    
-    private static final Connection conn = DatabaseController.getInstance().getConn();
+    static class Query {
+        final Connection conn;
+        final String query;
 
-    public static boolean addUser (User user){
-        long userId = user.getIdLong();
-        String userName = user.getName();
-        try{
-            var statement = conn.createStatement();
-            statement.executeUpdate(String.format("insert into users (id, name) VALUES (%d, '%s')", userId, userName));
-            return true;
-        }catch (Exception e){
-            return false;
+        public Query(Connection conn, String query) {
+            this.conn = conn;
+            this.query = query;
+        }
+
+        public boolean update() {
+            try {
+                var statement = conn.createStatement();
+                statement.executeUpdate(query);
+                return true;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+
+        public LinkedList<String[]> getColumn(String column) {
+            return getColumns(new String[]{column});
+        }
+
+        public LinkedList<String[]> getColumns(String[] columns) {
+            try {
+                var statement = conn.createStatement();
+                var result = statement.executeQuery(query);
+
+                final LinkedList list = new LinkedList<String[]>();
+                
+                while(result.next()){
+                    String[] tempArr = new String[columns.length];
+                    
+                    int i = 0;
+                    for(var col : columns){
+                        tempArr[i++] = result.getString(col);
+                    }
+                    list.add(tempArr);
+                }
+
+                return list;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
         }
     }
 
+    private static final Dotenv dotenv = Dotenv.load();
+    private static final Connection conn = DatabaseController.getInstance().getConn();
 
-    public static int getUserLevel (User user){
+    public static boolean addUser(User user) {
+        long userId = user.getIdLong();
+        String userName = user.getName();
+        Query query = new Query(conn,
+                String.format("insert into users (id, name) VALUES (%d, '%s')", userId, userName));
+        return query.update();
+    }
+
+    public static int getUserLevel(User user) {
         final long userId = user.getIdLong();
         Statement statement;
         try {
@@ -43,57 +86,35 @@ public class LevelingController {
         }
     }
 
-    // If in the future we need the contents of a message we can use the id and jda to get it
-    public static boolean addNewMessage(Message msg){
+    // If in the future we need the contents of a message we can use the id and jda
+    // to get it
+    public static boolean addNewMessage(Message msg) {
         final long userId = msg.getAuthor().getIdLong();
-        try{
-            var statement = conn.createStatement();
-            statement.executeUpdate(String.format("update users set messageCount = 1 + users.messageCount where id = %d;", userId));
-            return true;
-        }catch (Exception e){
-            e.printStackTrace();
-            return false;
-        }
+        Query query = new Query(conn,
+                String.format("update users set messageCount = 1 + users.messageCount where id = %d;", userId));
+        return query.update();
     }
 
     // Gets the number of messages a user has so we can see if he levels up
     public static int getMessageCount(User user) {
         final long userId = user.getIdLong();
-        Statement statement;
-        try {
-            statement = conn.createStatement();
-            var result = statement.executeQuery(String.format("select messageCount from users where id = %d;", userId));
-            result.next();
-            return result.getInt("messagecount");
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return -1;
-        }
+        Query query = new Query(conn, String.format("select messageCount from users where id = %d;", userId));
+        return Integer.parseInt(query.getColumn("messagecount").get(0)[0]);
     }
 
-    public static void levelUp(User user){
+    public static void levelUp(User user) {
         final long userId = user.getIdLong();
-
-        try{
-            var statement = conn.createStatement();
-            statement.executeUpdate(String.format("update users set level = level + 1 where id = %d;", userId));
-        }catch (Exception e){
-            System.out.printf("Error leveling up user: %s", user.getName());
-        }
+        Query query = new Query(conn, String.format("update users set level = level + 1 where id = %d;", userId));
+        query.update();
     }
 
-    public static void setLevel(User user, int level){
+    public static void setLevel(User user, int level) {
         final long userId = user.getIdLong();
-
-        try{
-            var statement = conn.createStatement();
-            statement.executeUpdate(String.format("update users set level = %d where id = %d;", level, userId));
-        }catch (Exception e){
-            System.out.printf("Error leveling up user: %s", user.getName());
-        }
+        Query query = new Query(conn, String.format("update users set level = %d where id = %d;", level, userId));
+        query.update();
     }
 
-    public static boolean nextLevel(User user){
+    public static boolean nextLevel(User user) {
         final int level = getUserLevel(user);
         final int messageCount = getMessageCount(user);
 
@@ -104,57 +125,19 @@ public class LevelingController {
 
     public static int getUserRank(User user) {
         final long userId = user.getIdLong();
-        final Statement statement;
-        try {
-            statement = conn.createStatement();
-            var result = statement.executeQuery(String.format("select * " +
-                    "from (select id, rank() " +
-                    "over (order by messageCount desc) " +
-                    "from users) as \"ranking\" where id = %d;", userId));
-            result.next();
-            return result.getInt("rank");
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return -1;
-        }
-    }
-    
-    // Only used for geting the ranking
-    public static class TripletRanking{
-        public int rank;
-        public int messageCount;
-        public String name;
+        Query query = new Query(conn, String.format("select * " +
+        "from (select id, rank() " +
+        "over (order by messageCount desc) " +
+        "from users) as \"ranking\" where id = %d;", userId));
 
-        private TripletRanking(int rank, int messageCount, String name){
-            this.rank = rank;
-            this.messageCount = messageCount;
-            this.name = name;
-        }
+        return Integer.parseInt(query.getColumn("rank").get(0)[0]);
     }
 
-    public static LinkedList<TripletRanking> getRanking() {
-        final var list = new LinkedList<TripletRanking>();
+    public static LinkedList<String[]> getRanking() {
+        Query query = new Query(conn, "select name, messageCount, rank() " +
+        "over (order by messageCount desc) from users");
 
-        Statement statement;
-        try {
-            statement = conn.createStatement();
-            var result = statement.executeQuery("select name, messageCount, rank() " +
-                    "over (order by messageCount desc) from users");
-
-            while(result.next()){
-                var rank = result.getInt("rank");
-                var messageCount = result.getInt("messagecount");
-                var name = result.getString("name");
-
-                System.out.println(name);
-                var triplet = new TripletRanking(rank, messageCount, name);
-                list.add(triplet);
-            }
-            return list;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
-        }
+        return query.getColumns(new String[]{"rank", "name", "messagecount"});
     }
 
 }
