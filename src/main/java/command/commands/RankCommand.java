@@ -12,10 +12,10 @@ public class RankCommand implements ICommand {
         var ranking = LevelingController.getRanking();
 
         assert ranking != null;
-        for (LevelingController.TripletRanking triplet : ranking) {
+        for (var lst : ranking) {
             builder.append(
-                String.format("**%d.** %s amb **%d** missatges\n", 
-                triplet.rank, triplet.name, triplet.messageCount));
+                String.format("**%s.** %s amb **%s** missatges\n", 
+                lst[0], lst[1], lst[2]));
         }
 
         ctx.sendChannelMessage(EmbedTemplate.generalEmbed("Ranking del servidor:", builder.toString()));
