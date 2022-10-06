@@ -1,9 +1,11 @@
 package command;
 
+import command.commands.BanCommand;
 import command.commands.HelpCommand;
 import command.commands.HugCommand;
 import command.commands.RankCommand;
 import command.commands.ShutdownCommand;
+import command.commands.UnBanCommand;
 import command.commands.music.*;
 import io.github.cdimascio.dotenv.Dotenv;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
@@ -23,6 +25,9 @@ public class CommandManager {
 
         //Admin commands
         commands.add(new ShutdownCommand());
+        commands.add(new BanCommand());
+        commands.add(new UnBanCommand());
+
 
         //Music Commands:
         commands.add(new JoinCommand());
