@@ -51,7 +51,7 @@ public class CommandManager {
         return INSTANCE;
     }
 
-    public void handle(GuildMessageReceivedEvent e) {
+    public void handle(GuildMessageReceivedEvent e) {        
         String[] tokenized = e.getMessage().getContentRaw().split(" ");
 
         String commandName = tokenized[0].replace(Dotenv.load().get("PREFIX"), "");
@@ -61,6 +61,8 @@ public class CommandManager {
             String[] args = Arrays.copyOfRange(tokenized, 1, tokenized.length);
 
             final String userId = e.getAuthor().getId();
+
+            if (Admins.bannedIds.contains(userId)) return; //TODO enviar missatge humiliant
 
             if (cmd.adminCommand() && !Admins.adminIds.contains(userId)) {
                 e.getChannel().sendMessage("Nomes els admins poden fer anar aquesta commanda").queue();
