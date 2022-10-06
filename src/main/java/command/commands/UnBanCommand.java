@@ -1,4 +1,4 @@
-package command.commands.music;
+package command.commands;
 
 import javax.swing.Icon;
 
@@ -13,7 +13,7 @@ import postgres.methods.Query;
 public class UnBanCommand implements ICommand {
     private boolean unBanUser(User user){
         var conn = DatabaseController.getInstance().getConn();
-        Query query = new Query(conn, "update users set banned = true where id = %d;");
+        Query query = new Query(conn, String.format("update users set banned = false where id = %s;", user.getId()));
         return query.update();
     }
 
@@ -24,18 +24,29 @@ public class UnBanCommand implements ICommand {
 
     @Override
     public String getName() {
-        return "ban";
+        return "unban";
     }
 
     @Override
     public void handle(CommandContext ctx) {
-        var user = ctx.getAuthor();
+        var arg = ctx.getArgs()[0];
+        var user = ctx.getGuild().getMemberByTag(arg).getUser();
+
+        if (user == null) {
+            // TODO missatge de error
+            return;
+        }
+
+        long id = user.getIdLong();
         
+
         // TODO mirar si el usuari ja esta banejat
-        if(user.isBot() || Admins.adminIds.contains(user.getId())) return;
+        if(ctx.getAuthor().isBot() || Admins.adminIds.contains(id)) return;
+
+        
 
         if (unBanUser(user)){
-            ctx.sendChannelMessage(EmbedTemplate.generalEmbed("%s pot tornar a fer anar el bot".formatted(user.getName()), "Pero que vigili i no toqui els ous"));
+            ctx.sendChannelMessage(EmbedTemplate.generalEmbed("Restringit acces a %s".formatted(user.getName()), "Per tonto ja no tindra acces a cap comanda del bot"));
         }
         
     }

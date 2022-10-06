@@ -18,6 +18,9 @@ public class LevelingController {
     public static boolean addUser(User user) {
         long userId = user.getIdLong();
         String userName = user.getName();
+
+        if (getUserLevel(User.fromId(userId)) != -1) return false;
+
         Query query = new Query(conn,
                 String.format("insert into users (id, name) VALUES (%d, '%s')", userId, userName));
         return query.update();
