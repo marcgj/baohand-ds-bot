@@ -30,23 +30,28 @@ public class UnBanCommand implements ICommand {
     @Override
     public void handle(CommandContext ctx) {
         var arg = ctx.getArgs()[0];
-        var user = ctx.getGuild().getMemberByTag(arg).getUser();
 
-        if (user == null) {
+        var member = ctx.getGuild().getMemberById(arg);
+        //
+        if (member == null) {
             // TODO missatge de error
+            System.out.println(arg);
             return;
         }
-
-        long id = user.getIdLong();
         
-
+        var id = member.getId();
+        
+        
         // TODO mirar si el usuari ja esta banejat
-        if(ctx.getAuthor().isBot() || Admins.adminIds.contains(id)) return;
-
+        if(ctx.getAuthor().isBot() || Admins.adminIds.contains(id)) {
+            System.out.println("Trying to ban admin");
+            return;
+        }
         
 
-        if (unBanUser(user)){
-            ctx.sendChannelMessage(EmbedTemplate.generalEmbed("Restringit acces a %s".formatted(user.getName()), "Per tonto ja no tindra acces a cap comanda del bot"));
+        if (unBanUser(member.getUser())){
+            ctx.sendChannelMessage(EmbedTemplate.generalEmbed("Restringit acces a %s".formatted(member.getNickname()), "Per tonto ja no tindra acces a cap comanda del bot"));
+            Admins.bannedIds.remove(id);
         }
         
     }

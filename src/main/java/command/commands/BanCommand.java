@@ -9,9 +9,9 @@ import postgres.DatabaseController;
 import postgres.methods.Query;
 
 public class BanCommand implements ICommand {
-    private boolean banUser(User user){
+    private boolean banUser(String id){
         var conn = DatabaseController.getInstance().getConn();
-        Query query = new Query(conn, String.format("update users set banned = true where id = %s;", user.getId()));
+        Query query = new Query(conn, String.format("update users set banned = true where id = %s;", id));
         return query.update();
     }
 
@@ -28,23 +28,28 @@ public class BanCommand implements ICommand {
     @Override
     public void handle(CommandContext ctx) {
         var arg = ctx.getArgs()[0];
-        var user = ctx.getGuild().getMemberByTag(arg).getUser();
 
-        if (user == null) {
+        var member = ctx.getGuild().getMemberById(arg);
+        //
+        if (member == null) {
             // TODO missatge de error
+            System.out.println(arg);
             return;
         }
-
-        long id = user.getIdLong();
         
-
+        var id = member.getId();
+        
+        
         // TODO mirar si el usuari ja esta banejat
-        if(ctx.getAuthor().isBot() || Admins.adminIds.contains(id)) return;
-
+        if(ctx.getAuthor().isBot() || Admins.adminIds.contains(id)) {
+            System.out.println("Trying to ban admin");
+            return;
+        }
         
 
-        if (banUser(user)){
-            ctx.sendChannelMessage(EmbedTemplate.generalEmbed("Restringit acces a %s".formatted(user.getName()), "Per tonto ja no tindra acces a cap comanda del bot"));
+        if (banUser(id)){
+            ctx.sendChannelMessage(EmbedTemplate.generalEmbed("Restringit acces a %s".formatted(member.getNickname()), "Per tonto ja no tindra acces a cap comanda del bot"));
+            Admins.bannedIds.add(id);
         }
     }
     
