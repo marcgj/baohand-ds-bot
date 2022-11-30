@@ -25,8 +25,8 @@ public class CommandManager {
 
         //Admin commands
         commands.add(new ShutdownCommand());
-        commands.add(new BanCommand());
-        commands.add(new UnBanCommand());
+        //commands.add(new BanCommand());
+        //commands.add(new UnBanCommand());
 
 
         //Music Commands:
@@ -39,7 +39,7 @@ public class CommandManager {
         commands.add(new LoopCommand());
 
         // Leveling commands
-        commands.add(new RankCommand());
+        //commands.add(new RankCommand());
 
     }
 
@@ -62,12 +62,12 @@ public class CommandManager {
 
             final String userId = e.getAuthor().getId();
 
-            if (Admins.bannedIds.contains(userId)) return; //TODO enviar missatge humiliant
+            //if (Admins.bannedIds.contains(userId)) return; //TODO enviar missatge humiliant
 
-            if (cmd.adminCommand() && !Admins.adminIds.contains(userId)) {
-                e.getChannel().sendMessage("Nomes els admins poden fer anar aquesta commanda").queue();
-                return;
-            }
+            //if (cmd.adminCommand() && !Admins.adminIds.contains(userId)) {
+            //    e.getChannel().sendMessage("Nomes els admins poden fer anar aquesta commanda").queue();
+            //    return;
+            // }
 
             cmd.handle(new CommandContext(e, args));
         } else {

@@ -22,7 +22,7 @@ public class Listener extends ListenerAdapter {
             manager.handle(event);
         }
 
-        LevelingCore.handle(event);
+        //LevelingCore.handle(event);
     }
 
     // Used for queue command where it allows the user to switch between pages
@@ -64,6 +64,6 @@ public class Listener extends ListenerAdapter {
     public void onReady(@NotNull ReadyEvent event) {
         System.out.println("Bot ONLINE!");
         // Once the bot is started we connect to the database
-        DatabaseController.getInstance();
+        //DatabaseController.getInstance();
     }
 }
