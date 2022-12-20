@@ -20,7 +20,7 @@ public class CommandManager {
     private final List<ICommand> commands = new ArrayList<>();
 
     public CommandManager() {
-        commands.add(new HugCommand());
+        //commands.add(new HugCommand());
         commands.add(new HelpCommand());
 
         //Admin commands
